@@ -18,7 +18,7 @@ _______________
 
 * If you have an Eclipse running :
 
-  1.Download the SmaC Update Site: [Link download](https://github.com/CristianGM23/SM2/blob/master/SmaCUpdateSite.zip)
+  1.Download the SmaC Update Site: [Link download](https://github.com/KybeleResearch/SmaC/blob/main/SmaCUpdateSite.zip)
 
   2.Choose Help -> Install New Software... from the menu bar and click Add...
 
