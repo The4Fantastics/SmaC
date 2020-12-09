@@ -46,7 +46,7 @@ _______________________
 
   4.Write a Solidity Smart contract.
   
-Download a SmaC Guide PDF: [Link download](https://github.com/CristianGM23/SM2/blob/master/SmaCUpdateSite.zip)
+Download a SmaC Guide PDF: [Link download](https://github.com/KybeleResearch/SmaC/blob/main/GuideSmaC.pdf)
 
 **Tips**
 ________________________
