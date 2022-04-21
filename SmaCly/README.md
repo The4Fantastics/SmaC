@@ -11,7 +11,7 @@ _______________
 **ScreenCast**
 _______________
 
-![SmaCly tool](https://github.com/CristianGM23/SmacBlockly/blob/master/SmaCly.JPG)
+![SmaCly tool](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly.JPG)
 
 
 **SmaCly Functionality Guide**
