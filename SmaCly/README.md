@@ -20,7 +20,7 @@ _______________________
 ![SmaCly Save XML](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaCly_SeeXML.gif)
 * **Save the XML of the smart contract model**. The "Save Xml" button offers the possibility of storing the smart contract model (.xml file) represented by blocks on the device on which SmaCly is running.
 ![SmaCly Save XML](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaClY_SaveXML.gif)
-* **Get a log of app usage activity**. The "Save Log Events" button offers the possibility of storing a record of all the events that have occurred when using SmaCly.**It is necessary** to point out that in order for the events to be registered, the **"Register log events" option must be checked**.
+* **Get a log of app usage activity**. The "Save Log Events" button offers the possibility of storing a record of all the events that have occurred when using SmaCly. **It is necessary** to point out that in order for the events to be registered, the **"Register log events" option must be checked**.
 ![SmaCly Save Log](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaCly_SaveLog.gif)
 * **Clean workspace**. The "Clean blocks" button provides the ability to remove all graphic blocks from the workspace, having previously confirmed that you want to perform this action.
  ![SmaCly Clean Workspace](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaCly_CleanBlocks.gif)
