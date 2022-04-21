@@ -9,7 +9,9 @@ Definition of a textual language (terminals, rules, patterns) using Xtext for th
 **ScreenCast**
 _______________
 
-
+**SmaC tool use**
+_______________
+![SmaCly tool display](https://github.com/KybeleResearch/SmaC/blob/main/Videos/SmaC_Calculator.gif)
 
 **Install SmaC from Update Site**
 _______________
