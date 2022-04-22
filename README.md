@@ -1,6 +1,6 @@
 **SmaC Tool**
 ================
-* Technological framework to facilitate the development of smart contracts. SmaC is a textual DSL that supports the coding of smart contracts with Solidity. These contracts can be injected to EMF models and then subject to any model-based processing task. In relation to some of the challenges of coding smart contracts, SmaC presents a series of advantages detailed below:...
+* Technological framework to facilitate the development of smart contracts. SmaC is a textual DSL that supports the coding of smart contracts with Solidity. These contracts can be injected to EMF models and then subject to any model-based processing task. In relation to some of the challenges of coding smart contracts, SmaC presents a series of advantages detailed below:  
    1.SmaC establishes a structural pattern for the coding of a smart contract. The specified smart contract is therefore made more readable and understandable by the developer.
    2.It requires defining a gas control when executing the loop actions. This avoids infinite loops which may lead to security issues.
    3.Although Solidity allows multiple inheritance, that is, a contract can inherit from several contracts at the same time, SmaC only allows single inheritance, which avoids what is known as the *Diamond Problem*. We advocate the use of interfaces to obtain external functionality that is defined outside the smart contract.
