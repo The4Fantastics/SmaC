@@ -79,3 +79,5 @@ ________________________
 * When defining a contract using the tool, it proposes code autocomplete suggestions using the CTRL + SPACE key combination
 
 * Language demands a gas restriction within the loops.
+* Although Solidity allows multiple inheritance, that is, a contract can inherit from several contracts at the same time, SmaC only allows single inheritance, which avoids what is known as the diamond problem. We advocate the use of interfaces to obtain external functionality that is defined outside the smart contract.
+
