@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.0"/>
+  <contracts name="ItemListContract">
+    <localProperties xsi:type="smaC:PropertyUInteger" name="itemCount"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" array="[]" type="item" name="itemArray"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="itemList" type="mapping" key="bytes" valueIdentifier="item"/>
+    <structs name="item">
+      <properties xsi:type="smaC:PropertyBytes" namePropertyBytes="iname"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint16" name="itemid"/>
+      <properties xsi:type="smaC:PropertyBytes" namePropertyBytes="icode"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="ivalue"/>
+    </structs>
+    <clauses name="addItem">
+      <inputParams typeSingularInput="bytes" valueInput="name"/>
+      <inputParams typeSingularInput="uint16" valueInput="iid"/>
+      <inputParams typeSingularInput="bytes" valueInput="code"/>
+      <inputParams typeSingularInput="uint" valueInput="val"/>
+      <expressions>var itemnew = item</expressions>
+      <expressions>(name, iid ,code, val);</expressions>
+      <expressions>itemList[code] = itemnew;</expressions>
+      <expressions>itemArray.push(itemnew);</expressions>
+      <expressions>itemCount++;</expressions>
+    </clauses>
+    <clauses name="countItemList">
+      <outputParams type="uint" value="count"/>
+      <expressions>return itemCount;</expressions>
+    </clauses>
+    <clauses name="removeItem">
+      <inputParams typeSingularInput="bytes" valueInput="code"/>
+      <expressions>delete itemList[code];</expressions>
+      <expressions>itemCount--;</expressions>
+    </clauses>
+    <clauses name="getItem" constant="constant">
+      <inputParams typeSingularInput="bytes" valueInput="code"/>
+      <outputParams type="bytes" value="iname"/>
+      <outputParams type="uint" value="val"/>
+      <expressions>return (itemList[code].iname, itemList[code].ivalue);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
