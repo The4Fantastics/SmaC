@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">" numberVersion="0.7.0"/>
+  <contracts name="Calculator">
+    <clauses name="sum">
+      <inputParams typeSingularInput="uint256" valueInput="num1"/>
+      <inputParams typeSingularInput="uint256" valueInput="num2"/>
+      <outputParams type="uint256"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="result" inicialization="num1 + num2"/>
+      <expressions>return result;</expressions>
+    </clauses>
+    <clauses name="subtract">
+      <inputParams typeSingularInput="uint256" valueInput="num1"/>
+      <inputParams typeSingularInput="uint256" valueInput="num2"/>
+      <outputParams type="uint256"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="result" inicialization="num1 - num2"/>
+      <expressions>return result;</expressions>
+    </clauses>
+    <clauses name="mult">
+      <inputParams typeSingularInput="uint" valueInput="num1"/>
+      <inputParams typeSingularInput="uint" valueInput="num2"/>
+      <outputParams type="uint"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="number" inicialization="num1 * num2"/>
+      <expressions>return number;</expressions>
+    </clauses>
+    <clauses name="div">
+      <inputParams typeSingularInput="uint" valueInput="num1"/>
+      <inputParams typeSingularInput="uint" valueInput="num2"/>
+      <outputParams type="uint"/>
+      <conditions condition="num2 != 0">
+        <properties xsi:type="smaC:PropertyUInteger" name="number" inicialization="num1 / num2"/>
+        <expressions>return number;</expressions>
+        <expressionsElse>return 0;</expressionsElse>
+      </conditions>
+    </clauses>
+  </contracts>
+  <contracts name="CalculatorComplete" superType="//@contracts.0">
+    <clauses name="factorial">
+      <inputParams typeSingularInput="uint" valueInput="number"/>
+      <outputParams type="uint256"/>
+      <conditions condition="number == 1">
+        <expressions>return 1;</expressions>
+        <expressionsElse>return number * factorial</expressionsElse>
+        <expressionsElse>(number-1);</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="greaterThan">
+      <inputParams typeSingularInput="uint" valueInput="number1"/>
+      <inputParams typeSingularInput="uint" valueInput="number2"/>
+      <outputParams type="uint256"/>
+      <conditions condition="number1 >= number2">
+        <expressions>return number1;</expressions>
+        <expressionsElse>return number2;</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="lessThan">
+      <inputParams typeSingularInput="uint" valueInput="number1"/>
+      <inputParams typeSingularInput="uint" valueInput="number2"/>
+      <outputParams type="uint256"/>
+      <conditions condition="number1 &lt;= number2">
+        <expressions>return number1;</expressions>
+        <expressionsElse>return number2;</expressionsElse>
+      </conditions>
+    </clauses>
+  </contracts>
+</smaC:File>
