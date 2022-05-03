@@ -11,6 +11,5 @@ In this directory, a series of smart contracts encoded with the SmaC tool are fo
 | [DNS](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/DNS.sce) | Simulate a Domain Name System for register web domains | [DNS model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/DNS.xmi)
  [Item List](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/ItemList.sce) | Collects functionality to store/delete/counter and get items in a list |  [Item List model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/ItemList.xmi)
 | [Deliveroo](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Deliveroo.sce) | Simulates the process of sending, paying and receiving an order from the company Deliveroo | [Deliveroo model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Deliveroo.xmi)
-| [Purchase](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Purchase.sce) | Simulate a remote purchase using an escrow
-| [Purchase model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Auction.xmi)
+| [Purchase](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Purchase.sce) | Simulate a remote purchase using an escrow | [Purchase model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Purchase.xmi)
 
