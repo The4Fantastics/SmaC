@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.18"/>
+  <contracts name="DNS">
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="domain" type="mapping" key="bytes32" value="bytes16"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="owner" type="mapping" key="bytes32" value="address payable"/>
+    <clauses name="is_available" visibilityAccess="private">
+      <inputParams typeSingularInput="bytes32" valueInput="domain_name"/>
+      <outputParams type="bool"/>
+      <conditions condition="domain[domain_name] == 0">
+        <expressions>return true ;</expressions>
+        <expressionsElse>return false;</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="register" predefinedModifier="payable">
+      <inputParams typeSingularInput="bytes32" valueInput="domain_name"/>
+      <inputParams typeSingularInput="bytes16" valueInput="ip"/>
+      <restriction xsi:type="smaC:Restriction" expr1="is_available(domain_name)"/>
+      <expressions>owner[domain_name] = msg.sender;</expressions>
+      <expressions>domain[domain_name] = ip;</expressions>
+    </clauses>
+    <clauses name="set_ip">
+      <inputParams typeSingularInput="bytes32" valueInput="domain_name"/>
+      <inputParams typeSingularInput="bytes16" valueInput="ip"/>
+      <conditions condition="msg.sender != owner[domain_name]">
+        <expressions>return;</expressions>
+      </conditions>
+      <expressions>domain[domain_name] = ip;</expressions>
+    </clauses>
+    <clauses name="query_domain">
+      <inputParams typeSingularInput="bytes32" valueInput="domain_name"/>
+      <outputParams type="bytes16"/>
+      <expressions>return domain[domain_name];</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
