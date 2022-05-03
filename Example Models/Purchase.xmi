@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">=" numberVersion="0.4.22" symbolComparation="&lt;" numberVersion2="0.6.0"/>
+  <contracts name="Purchase">
+    <localEnumerators nameEnumerator="State">
+      <values>Created</values>
+      <values>Locked</values>
+      <values>Inactive</values>
+    </localEnumerators>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="val"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address payable" name="sender"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address payable" name="buyer"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="State" name="state"/>
+    <constructors type="public" payable="payable">
+      <restrictions xsi:type="smaC:Restriction" expr1="2 * val" operator="==" expr2="msg.value" message="&quot;Value has to be even.&quot;"/>
+      <attributesInitialization>seller = msg.sender</attributesInitialization>
+      <attributesInitialization>val = msg.value/2</attributesInitialization>
+    </constructors>
+    <modifiers name="condition">
+      <inputParams typeSingularInput="bool" valueInput="_condition"/>
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="_condition"/>
+    </modifiers>
+    <modifiers name="onlyBuyer">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="buyer" message="&quot;Only buyer can call this.&quot;"/>
+    </modifiers>
+    <modifiers name="onlySeller">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="seller" message="&quot;Only seller can call this.&quot;"/>
+    </modifiers>
+    <modifiers name="inState">
+      <inputParams valueInput="State"/>
+      <inputParams valueInput="_state"/>
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="state" operator="==" expr2="_state" message="&quot;Invalid state.&quot;"/>
+    </modifiers>
+    <events name="Aborted"/>
+    <events name="PurchaseConfirmed"/>
+    <events name="ItemReceived"/>
+    <clauses name="abort" personalizedModifier="//@contracts.0/@modifiers.2 //@contracts.0/@modifiers.3" event="//@contracts.0/@events.0">
+      <inputParamsModifier valueInput="State.Created"/>
+      <expressions>state = State.Inactive;</expressions>
+      <expressions>seller.transfer(address(this).balance);</expressions>
+      <predefinedFunctions>selfdestruct(msg.sender);</predefinedFunctions>
+    </clauses>
+    <clauses name="confirmPurchase" personalizedModifier="//@contracts.0/@modifiers.3 //@contracts.0/@modifiers.0" predefinedModifier="payable" event="//@contracts.0/@events.1">
+      <inputParamsModifier valueInput="State.Created"/>
+      <inputParamsModifier valueInput="msg.value"/>
+      <expressions>buyer = msg.value;</expressions>
+      <expressions>state = State.Locked;</expressions>
+    </clauses>
+    <clauses name="confirmReceived" personalizedModifier="//@contracts.0/@modifiers.1 //@contracts.0/@modifiers.3" event="//@contracts.0/@events.2">
+      <inputParamsModifier valueInput="State.Locked"/>
+      <expressions>state = State.Inactive;</expressions>
+      <expressions>buyer.transfer(val);</expressions>
+      <expressions>seller.transfer(address(this).balance);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

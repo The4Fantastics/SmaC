@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">=" numberVersion="0.4.22"/>
+  <contracts name="Auction">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address payable" name="beneficiary"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="auctionEndTime"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address payable" name="highestBidder"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="highestBid"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" type="bool" name="ended"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="pendingReturns" type="mapping" key="address payable" value="bool"/>
+    <constructors type="public">
+      <inputParams typeSingularInput="address payable" valueInput="_beneficiary"/>
+      <inputParams typeSingularInput="uint" valueInput="_biddingTime"/>
+      <attributesInitialization>beneficiary = _beneficiary</attributesInitialization>
+      <attributesInitialization>auctionEndTime = _biddingTime + now</attributesInitialization>
+    </constructors>
+    <modifiers name="condition">
+      <inputParams typeSingularInput="bool" valueInput="condition"/>
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="condition"/>
+    </modifiers>
+    <modifiers name="onlyBeneficiary">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="beneficiary" message="&quot;Only beneficiary can call this.&quot;"/>
+    </modifiers>
+    <events name="HighestBidIncreased">
+      <inputParams typeSingularInput="address payable" valueInput="bidder"/>
+      <inputParams typeSingularInput="uint" valueInput="amount"/>
+    </events>
+    <events name="AuctionEnded">
+      <inputParams typeSingularInput="address payable" valueInput="winner"/>
+      <inputParams typeSingularInput="uint" valueInput="amount"/>
+    </events>
+    <clauses name="bid" predefinedModifier="payable" event="//@contracts.0/@events.0">
+      <restriction xsi:type="smaC:Restriction" expr1="now" operator="&lt;=" expr2="auctionEndTime" message="&quot;Auction already ended.&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.value" expr2="hihestBid" message="&quot;There already is a higher bid&quot;"/>
+      <conditions condition="highestBid != 0">
+        <expressions>pendingReturns[highestBidder] += highestBid;</expressions>
+      </conditions>
+      <expressions>highestBider = msg.sender;</expressions>
+      <expressions>highestBid = msg.value;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="msg.value"/>
+    </clauses>
+    <clauses name="withdraw">
+      <outputParams type="bool"/>
+      <conditions condition="amount>0">
+        <conditionalExpr condition="!msg.sender.send(amount)">
+          <expressions>pendingReturns[msg.sender] = 0;</expressions>
+          <expressions>return false;</expressions>
+        </conditionalExpr>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" name="amount" inicialization="pendingReturns[msg.sender]"/>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="auctionEnd" personalizedModifier="//@contracts.0/@modifiers.1" event="//@contracts.0/@events.1">
+      <restriction xsi:type="smaC:Restriction" expr1="now" operator=">=" expr2="auctionEndTime" message="&quot;Auction not yet ended.&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="ended" message="&quot;Auction has already been called.&quot;"/>
+      <expressions>ended = true;</expressions>
+      <expressions>beneficiary.transfer(highestBid);</expressions>
+      <inputParamsEvent valueInput="highestBidder"/>
+      <inputParamsEvent valueInput="highestBid"/>
+    </clauses>
+  </contracts>
+</smaC:File>
