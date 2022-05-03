@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.21"/>
+  <contracts name="EternalStorage">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="msg.sender"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="latestVersion"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="uIntStorage" type="mapping" key="bytes32" value="uint"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="stringStorage" type="mapping" key="bytes32" value="string"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="addressStorage" type="mapping" key="bytes32" value="address "/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="bytesStorage" type="mapping" key="bytes32" value="bytes"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="boolStorage" type="mapping" key="bytes32" value="bool"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="intStorage" type="mapping" key="bytes32" value="int"/>
+    <modifiers name="onlyLatestVersion">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="latestVersion"/>
+    </modifiers>
+    <clauses name="upgradeVersion">
+      <inputParams typeSingularInput="address " valueInput="_newVersion"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="owner"/>
+      <expressions>latestVersion = _newVersion;</expressions>
+    </clauses>
+    <clauses name="getUint" visibilityAccess="external">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <outputParams type="uint"/>
+      <expressions>return uIntStorage[_key];</expressions>
+    </clauses>
+    <clauses name="getString" visibilityAccess="external">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <outputParams type="string"/>
+      <expressions>return stringStorage[_key];</expressions>
+    </clauses>
+    <clauses name="getAddress" visibilityAccess="external">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <outputParams type="address "/>
+      <expressions>return addressStorage[_key];</expressions>
+    </clauses>
+    <clauses name="getBytes" visibilityAccess="external">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <outputParams type="bytes"/>
+      <expressions>return bytesStorage[_key];</expressions>
+    </clauses>
+    <clauses name="getBool" visibilityAccess="external">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <outputParams type="bool"/>
+      <expressions>return boolStorage[_key];</expressions>
+    </clauses>
+    <clauses name="getInt" visibilityAccess="external">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <outputParams type="int"/>
+      <expressions>return intStorage[_key];</expressions>
+    </clauses>
+    <clauses name="setUint" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <inputParams typeSingularInput="uint" valueInput="_value"/>
+      <expressions>uIntStorage[_key] = _value;</expressions>
+    </clauses>
+    <clauses name="setString" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <inputParams typeSingularInput="string" valueInput="_value"/>
+      <expressions>stringStorage[_key] = _value;</expressions>
+    </clauses>
+    <clauses name="setAddress" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <inputParams typeSingularInput="address " valueInput="_value"/>
+      <expressions>addressStorage[_key] = _value;</expressions>
+    </clauses>
+    <clauses name="setBytes" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <inputParams typeSingularInput="bytes" valueInput="_value"/>
+      <expressions>bytesStorage[_key] = _value;</expressions>
+    </clauses>
+    <clauses name="setBool" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <inputParams typeSingularInput="bool" valueInput="_value"/>
+      <expressions>boolStorage[_key] = _value;</expressions>
+    </clauses>
+    <clauses name="setInt" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <inputParams typeSingularInput="int" valueInput="_value"/>
+      <expressions>intStorage[_key] = _value;</expressions>
+    </clauses>
+    <clauses name="deleteUint" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <expressions>delete uIntStorage[_key];</expressions>
+    </clauses>
+    <clauses name="deleteString" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <expressions>delete stringStorage[_key];</expressions>
+    </clauses>
+    <clauses name="deleteAddress" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <expressions>delete addressStorage[_key];</expressions>
+    </clauses>
+    <clauses name="deleteBytes" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <expressions>delete bytesStorage[_key];</expressions>
+    </clauses>
+    <clauses name="deleteBool" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <expressions>delete boolStorage[_key];</expressions>
+    </clauses>
+    <clauses name="deleteInt" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="bytes32" valueInput="_key"/>
+      <expressions>delete intStorage[_key];</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

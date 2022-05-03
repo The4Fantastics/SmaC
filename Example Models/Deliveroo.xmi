@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">=" numberVersion="0.3.24"/>
+  <contracts name="Deliveroo">
+    <localProperties xsi:type="smaC:PropertyUser" visibility="private" type="User" name="user"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" visibility="private" type="bool" name="confirmOrderRestaurant"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" visibility="private" type="bool" name="confirmReceiveOrderDeliveryUser"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" visibility="private" type="bool" name="confirmOrderUser"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" visibility="private" type="bool" name="confirmOrderDeliveryUser"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" visibility="private" type="DeliveryUser" name="assignedDeliveryUser"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="DeliveryUser" name="deliveryUser"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" visibility="private" name="commissionDeliveryCompany"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" visibility="private" name="commissionDeliveryUser"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" visibility="private" name="priceOrder"/>
+    <localProperties xsi:type="smaC:PropertyCompany" visibility="private" type="Company" name="restaurant"/>
+    <localProperties xsi:type="smaC:PropertyCompany" visibility="private" type="Company" name="deliveryCompany"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" array="[]" type="DeliveryUser" name="listDeliveryUsers"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="registerDeliveryUsers" type="mapping" key="address " valueIdentifier="DeliveryUser"/>
+    <structs name="DeliveryUser">
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="idAddress"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="name"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="surname"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="email"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="available"/>
+    </structs>
+    <structsUser name="User" nameAttributeAddress="idAddress" nameAttributeUser="name" nameAttributeSurnameUser="surname" emailAttributeUser="email">
+      <properties xsi:type="smaC:PropertyString" type="string" name="city"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="street"/>
+    </structsUser>
+    <structsCompany name="Company" nameAttributeAddress="idAddress" nameAttributeCompany="name" nameAttributeCity="city" emailAttributeCompany="email">
+      <properties xsi:type="smaC:PropertyString" type="string" name="street"/>
+    </structsCompany>
+    <constructors type="public">
+      <inputParams typeSingularInput="string" valueInput="_nameDeliveryCompany"/>
+      <inputParams typeSingularInput="string" valueInput="_city"/>
+      <inputParams typeSingularInput="string" valueInput="_email"/>
+      <inputParams typeSingularInput="string" valueInput="_street"/>
+      <inputParams typeSingularInput="uint" valueInput="_commissionDeliveryCompany"/>
+      <inputParams typeSingularInput="uint" valueInput="_commissionDeliveryUser"/>
+      <attributesInitialization>deliveryCompany.idAddress = msg.sender</attributesInitialization>
+      <attributesInitialization>deliveryCompany.name = _nameDeliveryCompany</attributesInitialization>
+      <attributesInitialization>deliveryCompany.city = _city</attributesInitialization>
+      <attributesInitialization>deliveryCompany.email = _email</attributesInitialization>
+      <attributesInitialization>deliveryCompany.street = _street</attributesInitialization>
+      <attributesInitialization>commissionDeliveryCompany = _commissionDeliveryCompany</attributesInitialization>
+      <attributesInitialization>commissionDeliveryUser = _commissionDeliveryUser</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyDeliveryCompany">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="deliveryCompany.idAddress"/>
+    </modifiers>
+    <modifiers name="onlyUser">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="user.idAddress"/>
+    </modifiers>
+    <modifiers name="onlyRestaurantCompany">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="restaurant.idAddress"/>
+    </modifiers>
+    <modifiers name="onlyDeliveryUser">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="assignedDeliveryUser.idAddress"/>
+    </modifiers>
+    <events name="ApproveOrder">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </events>
+    <events name="DeniedOrder">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </events>
+    <events name="UserPayAccepted">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </events>
+    <clauses name="set_User_detail" personalizedModifier="//@contracts.0/@modifiers.1">
+      <inputParams typeSingularInput="address " valueInput="_address"/>
+      <inputParams typeSingularInput="string" valueInput="_nameUser"/>
+      <inputParams typeSingularInput="string" valueInput="_surnameUser"/>
+      <inputParams typeSingularInput="string" valueInput="_email"/>
+      <inputParams typeSingularInput="string" valueInput="_city"/>
+      <inputParams typeSingularInput="string" valueInput="_street"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_address" operator="!=" expr2="address(0)"/>
+      <expressions>user = User(_address,_nameUser,_surnameUser,_email,_city,_street);</expressions>
+    </clauses>
+    <clauses name="set_UserDelivery_detail">
+      <inputParams typeSingularInput="address " valueInput="_address"/>
+      <inputParams typeSingularInput="string" valueInput="_nameUser"/>
+      <inputParams typeSingularInput="string" valueInput="_surnameUser"/>
+      <inputParams typeSingularInput="string" valueInput="_email"/>
+      <inputParams typeSingularInput="bool" valueInput="_available"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_address" operator="!=" expr2="address(0)"/>
+      <expressions>deliveryUser = DeliveryUser</expressions>
+      <expressions>(_address,_nameUser,_surnameUser,_email,_available);</expressions>
+      <expressions>listDeliveryUsers.push(deliveryUser);</expressions>
+      <expressions>registerDeliveryUsers[deliveryUser.idAddress] = deliveryUser;</expressions>
+    </clauses>
+    <clauses name="get_User_Details">
+      <outputParams type="address "/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <expressions>return (user.idAddress,user.name,user.surname,user.email,user.street);</expressions>
+    </clauses>
+    <clauses name="set_Restaurant_detail">
+      <inputParams typeSingularInput="address " valueInput="_address"/>
+      <inputParams typeSingularInput="string" valueInput="_name"/>
+      <inputParams typeSingularInput="string" valueInput="_city"/>
+      <inputParams typeSingularInput="string" valueInput="_email"/>
+      <inputParams typeSingularInput="string" valueInput="_street"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_address" operator="!=" expr2="address(0)"/>
+      <expressions>restaurant = Company(_address,_name,_city,_email,_street);</expressions>
+    </clauses>
+    <clauses name="get_Restaurant_Details">
+      <outputParams type="address "/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <expressions>return (restaurant.idAddress,restaurant.name,restaurant.city, restaurant.email,restaurant.street);</expressions>
+    </clauses>
+    <clauses name="get_Company_info">
+      <outputParams type="address "/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <expressions>return(deliveryCompany.idAddress,deliveryCompany.name,deliveryCompany.city,deliveryCompany.email,deliveryCompany.street);</expressions>
+    </clauses>
+    <clauses name="set_Price" visibilityAccess="private" personalizedModifier="//@contracts.0/@modifiers.2">
+      <inputParams typeSingularInput="uint" valueInput="_price"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_price" expr2="0" message="&quot;Price must be greater than 0&quot;"/>
+      <expressions>priceOrder = _price;</expressions>
+    </clauses>
+    <clauses name="set_Modify_Delivery_Commision" visibilityAccess="private" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="uint" valueInput="_commission"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_commission" expr2="0" message="&quot;Price must be greater than 0&quot;"/>
+      <expressions>commissionDeliveryCompany = _commission;</expressions>
+    </clauses>
+    <clauses name="set_Modify_DeliveryUser_Commision" visibilityAccess="private" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="uint" valueInput="_commission"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_commission" expr2="0" message="&quot;Price must be greater than 0&quot;"/>
+      <expressions>commissionDeliveryUser = _commission;</expressions>
+    </clauses>
+    <clauses name="get_DeliveryUser_Details">
+      <inputParams typeSingularInput="address " valueInput="idAddressUserDelivery"/>
+      <outputParams type="address "/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="bool"/>
+      <restriction xsi:type="smaC:Restriction" expr1="idAddressUserDelivery" operator="!=" expr2="address(0)"/>
+      <expressions>deliveryUser = registerDeliveryUsers[idAddressUserDelivery];</expressions>
+      <expressions>return (deliveryUser.idAddress,deliveryUser.name,deliveryUser.surname,deliveryUser.email,deliveryUser.available);</expressions>
+    </clauses>
+    <clauses name="getInfoAssignedDeliveryUser">
+      <outputParams type="address "/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="bool"/>
+      <expressions>return (assignedDeliveryUser.idAddress, assignedDeliveryUser.name, assignedDeliveryUser.surname, assignedDeliveryUser.email, assignedDeliveryUser.available);</expressions>
+    </clauses>
+    <clauses name="assignDeliveryUser" visibilityAccess="private" personalizedModifier="//@contracts.0/@modifiers.0">
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="assigned"/>
+      <determinedloops typeCounter="uint" nameCounter="i" condition="i &lt;= listDeliveryUsers.length">
+        <gasrestriction expr1="deliveryCompany.idAddress.balance" operator=">=" amount="100" typeCoin="szabo"/>
+        <conditions condition="listDeliveryUsers.available == true &amp;&amp; assigned == false">
+          <expressions>assignedDeliveryUser = listDeliveryUsers[i];</expressions>
+          <expressions>assigned = true;</expressions>
+          <expressions>break;</expressions>
+        </conditions>
+      </determinedloops>
+      <expressions>return assigned;</expressions>
+    </clauses>
+    <clauses name="sendConfirmationOrder" personalizedModifier="//@contracts.0/@modifiers.1" predefinedModifier="payable">
+      <restriction xsi:type="smaC:Restriction" expr1="user.idAddress.balance" operator=">=" expr2="priceOrder" message="&quot;User does not have sufficient funds&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="assignDeliveryUser()" message="&quot;Delivery User can not be assigned&quot;"/>
+      <expressions>user.idAddress.transfer(priceOrder);</expressions>
+      <expressions>get_DeliveryUser_Details(assignedDeliveryUser.idAddress);</expressions>
+    </clauses>
+    <clauses name="approveOrderByRestaurantCompany" personalizedModifier="//@contracts.0/@modifiers.2" event="//@contracts.0/@events.0">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </clauses>
+    <clauses name="deniedOrderByRestaurantCompany" personalizedModifier="//@contracts.0/@modifiers.2" event="//@contracts.0/@events.1">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </clauses>
+    <clauses name="approveOrderByDeliveryCompany" personalizedModifier="//@contracts.0/@modifiers.0" event="//@contracts.0/@events.0">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </clauses>
+    <clauses name="receivedOrder" personalizedModifier="//@contracts.0/@modifiers.1">
+      <expressions>confirmOrderUser = true;</expressions>
+    </clauses>
+    <clauses name="deliveredOrder" personalizedModifier="//@contracts.0/@modifiers.3">
+      <expressions>confirmOrderDeliveryUser = true;</expressions>
+    </clauses>
+    <clauses name="restaurantReceiveMoney" personalizedModifier="//@contracts.0/@modifiers.0">
+      <conditions condition="confirmOrderRestaurant &amp;&amp; confirmReceiveOrderDeliveryUser">
+        <properties xsi:type="smaC:PropertyUInteger" name="totalCommission" inicialization="commissionDeliveryCompany+commissionDeliveryUser"/>
+        <properties xsi:type="smaC:PropertyUInteger" name="restaurantAmount" inicialization="this.balance-totalCommission"/>
+        <expressions>confirmOrderRestaurant = false;</expressions>
+        <expressions>restaurant.idAddress.transfer(restaurantAmount);</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="deliveryUserReceiveMoney" personalizedModifier="//@contracts.0/@modifiers.0">
+      <conditions condition="confirmOrderUser &amp;&amp; confirmOrderDeliveryUser">
+        <expressions>confirmOrderDeliveryUser = false;</expressions>
+        <expressions>assignedDeliveryUser.idAddress.transfer(commissionDeliveryUser);</expressions>
+        <expressions>assignedDeliveryUser.available = true;</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="deliveryCompanyReceiveMoney" personalizedModifier="//@contracts.0/@modifiers.0">
+      <conditions condition="confirmOrderUser &amp;&amp; confirmOrderDeliveryUser">
+        <expressions>deliveryCompany.idAddress.transfer(commissionDeliveryCompany);</expressions>
+        <expressions>confirmOrderUser = false;</expressions>
+        <expressions>confirmReceiveOrderDeliveryUser = false;</expressions>
+        <expressions>priceOrder = 0;</expressions>
+      </conditions>
+    </clauses>
+  </contracts>
+</smaC:File>

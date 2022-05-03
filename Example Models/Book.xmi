@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <contracts name="Library">
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="Book" name="book1"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="Book" name="book2" inicialization="Book(&quot;Building Ethereum DApps&quot;,&quot;Roberto Infante&quot;,&quot;Manning&quot;,2, false)"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" array="[]" type="Book" name="bookOrganizer"/>
+    <structs name="Book">
+      <properties xsi:type="smaC:PropertyString" type="string" name="name"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="writter"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="publisher"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="id"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="available"/>
+    </structs>
+    <clauses name="insert_book1_detail">
+      <expressions>book1 = Book</expressions>
+      <expressions>(&quot;Introducing Ethereum and Solidity&quot;,&quot;Chris Dannen&quot;,&quot;Apress&quot;,1, true);</expressions>
+    </clauses>
+    <clauses name="book2_info">
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="uint"/>
+      <outputParams type="bool"/>
+      <expressions>return(book2.name, book2.writter, book2.publisher, book2.id, book2.available);</expressions>
+    </clauses>
+    <clauses name="book1_info">
+      <outputParams type="string"/>
+      <outputParams type="uint"/>
+      <expressions>return (book1.name, book1.id);</expressions>
+    </clauses>
+    <clauses name="create_new_book">
+      <inputParams typeSingularInput="string" valueInput="_nameBook"/>
+      <inputParams typeSingularInput="string" valueInput="_writter"/>
+      <inputParams typeSingularInput="string" valueInput="_publisher"/>
+      <inputParams typeSingularInput="uint" valueInput="_id"/>
+      <inputParams typeSingularInput="bool" valueInput="_available"/>
+      <properties xsi:type="smaC:PropertyIdentifier" type="Book" name="book" inicialization="Book(_nameBook, _writter, _publisher, _id, _available)"/>
+      <expressions>insert_books_organizer(book);</expressions>
+    </clauses>
+    <clauses name="insert_books_organizer">
+      <inputParams valueInput="Book"/>
+      <inputParams valueInput="book"/>
+      <expressions>bookOrganizer.push(book);</expressions>
+    </clauses>
+    <clauses name="searchBook">
+      <inputParams typeSingularInput="string" valueInput="name"/>
+      <inputParams typeSingularInput="string" valueInput="writter"/>
+      <outputParams type="Book" value="book"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="counter" inicialization="0"/>
+      <undeterminedloops xsi:type="smaC:WhileLoop" condition="counter &lt;= bookOrganizer.length &amp;&amp; book[counter].name != name &amp;&amp; book[counter].writter != writter">
+        <gasrestriction expr1="msg.balance" operator=">=" amount="100" typeCoin="wei"/>
+        <conditions condition="book[counter].name == name &amp;&amp; book[i].writter == writter">
+          <expressions>return book[counter];</expressions>
+          <expressions>break;</expressions>
+          <expressionsElse>counter++;</expressionsElse>
+        </conditions>
+      </undeterminedloops>
+    </clauses>
+    <clauses name="searchBook">
+      <inputParams typeSingularInput="uint" valueInput="id"/>
+      <outputParams type="Book" value="book"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="counter" inicialization="0"/>
+      <undeterminedloops xsi:type="smaC:WhileLoop" condition="counter &lt;= bookOrganizer.length &amp;&amp; book[counter].id != book.id">
+        <gasrestriction expr1="msg.balance" operator=">=" amount="100" typeCoin="wei"/>
+        <conditions condition="book[counter].id == book.id">
+          <expressions>return book[counter];</expressions>
+          <expressions>break;</expressions>
+          <expressionsElse>counter++;</expressionsElse>
+        </conditions>
+      </undeterminedloops>
+    </clauses>
+    <clauses name="searchInfoBook">
+      <inputParams typeSingularInput="string" valueInput="name"/>
+      <inputParams typeSingularInput="string" valueInput="writter"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="uint"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyIdentifier" type="Book" name="book" inicialization="searchBook(name,writter)"/>
+      <expressions>return(book.name, book.writter, book.publisher, book.id, book.available);</expressions>
+    </clauses>
+    <clauses name="searchInfoBook">
+      <inputParams typeSingularInput="uint" valueInput="_id"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="string"/>
+      <outputParams type="uint"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyIdentifier" type="Book" name="book" inicialization="searchBook(id)"/>
+      <expressions>return(book.name, book.writter, book.publisher, book.id, book.available);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.0"/>
+  <contracts name="Coin">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="minter"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="balances" type="mapping" key="address " value="uint"/>
+    <constructors type="public">
+      <attributesInitialization>minter = msg.sender</attributesInitialization>
+    </constructors>
+    <events name="Sent">
+      <inputParams typeSingularInput="address " valueInput="_from"/>
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint" valueInput="_amount"/>
+    </events>
+    <clauses name="mint">
+      <inputParams typeSingularInput="address " valueInput="receiver"/>
+      <inputParams typeSingularInput="uint" valueInput="amount"/>
+      <conditions condition="msg.sender != minter">
+        <expressions>return;</expressions>
+      </conditions>
+      <expressions>balances[receiver] += amount;</expressions>
+    </clauses>
+    <clauses name="sendCoin">
+      <inputParams typeSingularInput="address " valueInput="receiver"/>
+      <inputParams typeSingularInput="uint" valueInput="amount"/>
+      <conditions condition="balances[msg.sender] &lt; amount">
+        <expressions>return;</expressions>
+      </conditions>
+      <expressions>balances[msg.sender] -= amount;</expressions>
+      <expressions>balances[receiver] += amount;</expressions>
+      <expressions>Sent(msg.sender, receiver, amount);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
