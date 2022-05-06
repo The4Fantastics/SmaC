@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.6.6"/>
+  <contracts name="GFGToken">
+    <localProperties xsi:type="smaC:PropertyUInteger" name="_totalSupply" inicialization="500" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyAddress" name="owner" type="address "/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="balances" type="mapping" key="address " value="uint256"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="allowed" type="mapping" key="address ">
+      <valueIdentifier type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <events name="Approval">
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_spender"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+    </events>
+    <events name="Transfer">
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_from"/>
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+    </events>
+    <clauses name="totalSupply">
+      <outputParams type="uint256" value="theTotalSupply"/>
+      <expressions>theTotalSupply = _totalSupply;</expressions>
+      <expressions>return theTotalSupply;</expressions>
+    </clauses>
+    <clauses name="balanceOf">
+      <inputParams typeSingularInput="address " valueInput="_owner"/>
+      <outputParams type="uint256" value="_balance"/>
+      <expressions>return balances[_owner];</expressions>
+    </clauses>
+    <clauses name="approve" event="//@contracts.0/@events.0">
+      <inputParams typeSingularInput="address " valueInput="_spender"/>
+      <inputParams typeSingularInput="uint256" valueInput="_amount"/>
+      <outputParams type="bool" value="success"/>
+      <expressions>allowed[msg.sender][_spender] = _amount;</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="transfer">
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_amount"/>
+      <outputParams type="bool" value="success"/>
+      <conditions condition="balances[msg.sender] >= _amount" event="//@contracts.0/@events.1">
+        <expressions>balances[msg.sender] -= _amount;</expressions>
+        <expressions>balances[_to] += _amount;</expressions>
+        <expressions>return true;</expressions>
+        <inputParamsEvent valueInput="msg.sender"/>
+        <inputParamsEvent valueInput="_to"/>
+        <inputParamsEvent valueInput="_amount"/>
+        <expressionsElse>return false;</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="transferFrom" event="//@contracts.0/@events.1">
+      <inputParams typeSingularInput="address " valueInput="_from"/>
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_amount"/>
+      <outputParams type="bool" value="success"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balances[_from]" operator=">=" expr2="_amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="allowed[_from][msg.sender]" operator=">=" expr2="_amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_amount" expr2="0"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balances[_to]" operator="&lt;" expr2="balances[_to] + _amount"/>
+      <expressions>balances[_from] -= _amount;</expressions>
+      <expressions>balances[_to] += _amount;</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="allowance">
+      <inputParams typeSingularInput="address " valueInput="_owner"/>
+      <inputParams typeSingularInput="address " valueInput="_spender"/>
+      <outputParams type="uint256" value="remaining"/>
+      <expressions>return allowed[_owner][_spender];</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
