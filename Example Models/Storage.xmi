@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">" numberVersion="0.4.0"/>
+  <contracts name="StorageNumber">
+    <localProperties xsi:type="smaC:PropertyUInteger" name="number"/>
+    <clauses name="setNumber">
+      <inputParams typeSingularInput="uint" valueInput="_number"/>
+      <expressions>number = _number;</expressions>
+    </clauses>
+    <clauses name="getNumber">
+      <outputParams type="uint"/>
+      <expressions>return number;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="AccessRestriction">
+    <localProperties xsi:type="smaC:PropertyAddress" name="treasury" inicialization="msg.sender" type="address "/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="creationTime" inicialization="block.timestamp" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="minimumDonation" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyAddress" visibility="private" name="winner" type="address "/>
+    <modifiers name="onlyBefore">
+      <inputParams typeSingularInput="uint256" valueInput="_time"/>
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="block.timestamp" operator="&lt;" expr2="_time"/>
+    </modifiers>
+    <modifiers name="onlyAfter">
+      <inputParams typeSingularInput="uint256" valueInput="_time"/>
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="block.timestamp" expr2="_time"/>
+    </modifiers>
+    <modifiers name="isHigherDonation">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.value" expr2="minimumDonation" message="&quot;Please send higher amount&quot;"/>
+      <expressionsAssignValueBeforeMark>winner = msg.sender</expressionsAssignValueBeforeMark>
+      <expressionsAssignValueBeforeMark>minimumDonation = msg.value</expressionsAssignValueBeforeMark>
+    </modifiers>
+    <clauses name="sendDonation" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0 //@contracts.0/@modifiers.2" predefinedModifier="payable">
+      <expressions>payable(treasury).transfer(msg.value);</expressions>
+    </clauses>
+    <clauses name="revealHighestDonor" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.1">
+      <outputParams type="address "/>
+      <expressions>return winner;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">" numberVersion="0.4.0"/>
+  <contracts name="StorageNumber">
+    <localProperties xsi:type="smaC:PropertyUInteger" name="number"/>
+    <localProperties xsi:type="smaC:PropertyAddress" name="owner" type="address payable"/>
+    <constructors type="public">
+      <attributesInitialization>owner = msg.sender</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOwner">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="owner" operator="==" expr2="msg.sender"/>
+    </modifiers>
+    <events name="NumberModified">
+      <inputParams typeSingularInput="string" valueInput="message"/>
+    </events>
+    <clauses name="setNumber" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams typeSingularInput="uint" valueInput="_number"/>
+      <expressions>number = _number;</expressions>
+    </clauses>
+    <clauses name="getNumber" personalizedModifier="//@contracts.0/@modifiers.0">
+      <outputParams type="uint"/>
+      <expressions>return number;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

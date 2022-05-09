@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">=" numberVersion="0.8.0"/>
+  <contracts name="AssertTest">
+    <clauses name="direct_assert">
+      <inputParams typeSingularInput="int" valueInput="val"/>
+      <restriction xsi:type="smaC:Assert" expr1="val % 100" operator="!=" expr2="0"/>
+    </clauses>
+    <clauses name="f">
+      <inputParams typeSingularInput="uint" valueInput="val"/>
+    </clauses>
+    <clauses name="g">
+      <expressions>revert();</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
