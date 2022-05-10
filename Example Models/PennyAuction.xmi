@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.24"/>
+  <imports name="&quot;./ierc20token.sol&quot;"/>
+  <contracts name="PennyAuction">
+    <localProperties xsi:type="smaC:PropertyAddress" name="seller" type="address "/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" name="token" type="IERC20Token"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="bidIncrement" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="timeoutPeriod" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="bidFee" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="auctionEnd" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyAddress" name="highBidder" type="address "/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="highBid" type="uint256"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="balanceOf" type="mapping" key="address " value="uint256"/>
+    <constructors type="public">
+      <inputParams valueInput="IERC20Token"/>
+      <inputParams valueInput="_token"/>
+      <inputParams typeSingularInput="uint256" valueInput="_bidIncrement"/>
+      <inputParams typeSingularInput="uint256" valueInput="_bidFee"/>
+      <inputParams typeSingularInput="uint256" valueInput="_timeoutPeriod"/>
+      <attributesInitialization>token = _token</attributesInitialization>
+      <attributesInitialization>bidIncrement = _bidIncrement</attributesInitialization>
+      <attributesInitialization>bidFee = _bidFee</attributesInitialization>
+      <attributesInitialization>timeoutPeriod = _timeoutPeriod</attributesInitialization>
+      <attributesInitialization>seller = msg.sender</attributesInitialization>
+      <attributesInitialization>auctionEnd = now + timeoutPeriod</attributesInitialization>
+      <attributesInitialization>highBidder = seller</attributesInitialization>
+    </constructors>
+    <events name="Bid">
+      <inputParams typeSingularInput="address " valueInput="highBidder"/>
+      <inputParams typeSingularInput="uint256" valueInput="highBid"/>
+    </events>
+    <clauses name="withdraw">
+      <properties xsi:type="smaC:PropertyUInteger" name="amount" inicialization="balanceOf[msg.sender]" type="uint256"/>
+      <expressions>balanceOf[msg.sender] = 0;</expressions>
+      <expressions>msg.sender.transfer(amount);</expressions>
+    </clauses>
+    <clauses name="bid" predefinedModifier="payable" event="//@contracts.0/@events.0">
+      <restriction xsi:type="smaC:Restriction" expr1="now" operator="&lt;" expr2="auctionEnd"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.sender" operator="!=" expr2="highBidder"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balanceOf[msg.sender]" operator=">=" expr2="highBid + bidIncrement + bidFee"/>
+      <expressions>balanceOf[msg.sender] += msg.value;</expressions>
+      <expressions>balanceOf[seller] += bidIncrement + bidFee;</expressions>
+      <expressions>balanceOf[highBidder] += highBid;</expressions>
+      <expressions>balanceOf[msg.sender] -= highBid + bidIncrement + bidFee;</expressions>
+      <expressions>highBid += bidIncrement;</expressions>
+      <expressions>highBidder = msg.sender;</expressions>
+      <expressions>auctionEnd = now + timeoutPeriod;</expressions>
+    </clauses>
+    <clauses name="resolve">
+      <restriction xsi:type="smaC:Restriction" expr1="now" operator=">=" expr2="auctionEnd"/>
+      <restriction xsi:type="smaC:Restriction" expr1="token.transfer(highBidder, t)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="t" inicialization="token.balanceOf(this)" type="uint256"/>
+    </clauses>
+  </contracts>
+</smaC:File>
