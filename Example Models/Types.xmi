@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <contracts name="Types">
+    <localEnumerators nameEnumerator="week_days">
+      <values>Monday</values>
+      <values>Tuesday</values>
+      <values>Wednesday</values>
+      <values>Thursday</values>
+      <values>Friday</values>
+      <values>Saturday</values>
+      <values>Sunday</values>
+    </localEnumerators>
+    <localProperties xsi:type="smaC:PropertyIdentifier" name="week" type="week_days"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" name="choice" type="week_days"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" constant="constant" name="default_value" inicialization="week_days.Sunday" type="week_days"/>
+    <clauses name="set_value">
+      <expressions>choice = week_days.Thursday;</expressions>
+    </clauses>
+    <clauses name="get_choice">
+      <outputParams type="week_days"/>
+      <expressions>return choice;</expressions>
+    </clauses>
+    <clauses name="getdefaultvalue" predefinedModifier="pure">
+      <outputParams type="week_days"/>
+      <expressions>return default_value;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
