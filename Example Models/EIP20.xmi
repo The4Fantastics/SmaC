@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.21"/>
+  <contracts name="EIP20Interface">
+    <localProperties xsi:type="smaC:PropertyUInteger" name="totalSupply" type="uint256"/>
+    <clauses name="balanceOf">
+      <inputParams typeSingularInput="address " valueInput="_owner"/>
+      <outputParams type="uint256" value="_balance"/>
+    </clauses>
+    <clauses name="transfer">
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+    </clauses>
+    <clauses name="transferFrom">
+      <inputParams typeSingularInput="address " valueInput="_from"/>
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+    </clauses>
+    <clauses name="approve">
+      <inputParams typeSingularInput="address " valueInput="_spender"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+    </clauses>
+    <clauses name="allowance">
+      <inputParams typeSingularInput="address " valueInput="_owner"/>
+      <inputParams typeSingularInput="address " valueInput="_spender"/>
+      <outputParams type="uint256" value="remaining"/>
+    </clauses>
+  </contracts>
+  <contracts name="EIP20" superType="//@contracts.0">
+    <localProperties xsi:type="smaC:PropertyUInteger" constant="constant" visibility="private" name="MAX_UINT256" inicialization="2**256 - 1" type="uint256"/>
+    <localProperties xsi:type="smaC:PropertyString" name="name" type="string"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" name="decimals" type="uint8"/>
+    <localProperties xsi:type="smaC:PropertyString" name="symbol" type="string"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="balances" type="mapping" key="address " value="uint256"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" nameMapping="allowed" type="mapping" key="address ">
+      <valueIdentifier type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <events name="Transfer">
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_from"/>
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+    </events>
+    <events name="Approval">
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams typeSingularInput="address " indexed="indexed" valueInput="_spender"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+    </events>
+    <clauses name="EIP20">
+      <inputParams typeSingularInput="uint256" valueInput="_initialAmount"/>
+      <inputParams typeSingularInput="string" valueInput="_tokenName"/>
+      <inputParams typeSingularInput="uint8" valueInput="_decimalUnits"/>
+      <inputParams typeSingularInput="string" valueInput="_tokenSymbol"/>
+      <expressions>balances[msg.sender] = _initialAmount;</expressions>
+      <expressions>totalSupply = _initialAmount;</expressions>
+      <expressions>name = _tokenName;</expressions>
+      <expressions>decimals = _decimalUnits;</expressions>
+      <expressions>symbol = _tokenSymbol;</expressions>
+    </clauses>
+    <clauses name="transfer" event="//@contracts.1/@events.0">
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balances[msg.sender]" operator=">=" expr2="_value"/>
+      <expressions>balances[msg.sender] -= _value;</expressions>
+      <expressions>balances[_to] += _value;</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="transferFrom" event="//@contracts.1/@events.0">
+      <inputParams typeSingularInput="address " valueInput="_from"/>
+      <inputParams typeSingularInput="address " valueInput="_to"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balances[_from]" operator=">=" expr2="_value"/>
+      <restriction xsi:type="smaC:Restriction" expr1="allowance" operator=">=" expr2="_value"/>
+      <conditions condition="allowance &lt; MAX_UINT256">
+        <expressions>allowed[_from][msg.sender] -= _value;</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" name="allowance" inicialization="allowed[_from][msg.sender]" type="uint256"/>
+      <expressions>balances[_to] += _value;</expressions>
+      <expressions>balances[_from] -= _value;</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="balanceOf">
+      <inputParams typeSingularInput="address " valueInput="_owner"/>
+      <outputParams type="uint256" value="_balance"/>
+      <expressions>return balances[_owner];</expressions>
+    </clauses>
+    <clauses name="approve" event="//@contracts.1/@events.1">
+      <inputParams typeSingularInput="address " valueInput="_spender"/>
+      <inputParams typeSingularInput="uint256" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+      <expressions>allowed[msg.sender][_spender] = _value;</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="allowance">
+      <inputParams typeSingularInput="address " valueInput="_owner"/>
+      <inputParams typeSingularInput="address " valueInput="_spender"/>
+      <outputParams type="uint256" value="remaining"/>
+      <expressions>return allowed[_owner][_spender];</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
