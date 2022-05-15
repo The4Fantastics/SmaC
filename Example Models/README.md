@@ -3,7 +3,7 @@
 In this directory, a series of smart contracts encoded with the SmaC tool are found as a demonstration.
 ### Smart contracts
 
-| Title | Info | Ecore Model
+| Smart contract sce model | Info | Ecore Model
 | --- | --- | --- |
 | [Array Test](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/ArrayTest.sce) | Solidity program to  demonstrate use assert function | [Array Test model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/ArrayTest.xmi)
 | [Access Registration](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/AccessRegistration.sce) | Access Registration | [Access Registration model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/AccessRegistration.xmi)
