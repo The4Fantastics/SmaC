@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <contracts name="ArrayTest">
+    <clauses name="testArray" predefinedModifier="pure">
+      <restriction xsi:type="smaC:Assert" expr1="a.length" operator="==" expr2="7"/>
+      <restriction xsi:type="smaC:Assert" expr1="b.length" operator="==" expr2="len"/>
+      <restriction xsi:type="smaC:Assert" expr1="a[6]" operator="==" expr2="8"/>
+      <restriction xsi:type="smaC:Assert" expr1="c.length" operator="==" expr2="3"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="len" inicialization="7"/>
+      <properties xsi:type="smaC:PropertyUInteger" array="[]" name="a" inicialization="new uint[](7)"/>
+      <properties xsi:type="smaC:PropertyBytes" name="b" inicialization="new bytes(len)"/>
+      <properties xsi:type="smaC:PropertyUInteger" array="[3]" name="c" inicialization="[uint(1), 2, 3]"/>
+      <expressions>a[6] = 8;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
