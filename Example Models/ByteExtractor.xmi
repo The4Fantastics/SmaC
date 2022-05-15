@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">=" numberVersion="0.4.24"/>
+  <contracts name="ByteExtractor">
+    <localProperties xsi:type="smaC:PropertyAddress" name="creator" type="address "/>
+    <clauses name="ByteExtractor">
+      <expressions>creator = msg.sender;</expressions>
+    </clauses>
+    <clauses name="getByteFromByte8" constant="constant">
+      <inputParams typeSingularInput="bytes8" valueInput="_b8"/>
+      <inputParams typeSingularInput="uint8" valueInput="byteindex"/>
+      <outputParams type="byte"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="numdigits" inicialization="16"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="buint" inicialization="uint(_b8)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="upperpowervar" inicialization="16 ** (numdigits - (byteindex*2))"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="lowerpowervar" inicialization="16 ** (numdigits - 2 - (byteindex*2))"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="postheadchop" inicialization="buint % upperpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="remainder" inicialization="postheadchop % lowerpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="evenedout" inicialization="postheadchop - remainder"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="b" inicialization="evenedout / lowerpowervar"/>
+      <expressions>return byte</expressions>
+      <expressions>(b);</expressions>
+    </clauses>
+    <clauses name="getByteFromByte32" constant="constant">
+      <inputParams typeSingularInput="bytes32" valueInput="_b32"/>
+      <inputParams typeSingularInput="uint8" valueInput="byteindex"/>
+      <outputParams type="byte"/>
+      <conditions condition="byteindex == 0">
+        <expressions>postheadchop = buint;</expressions>
+        <expressionsElse>postheadchop = buint % upperpowervar;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" name="numdigits" inicialization="64"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="buint" inicialization="uint(_b32)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="upperpowervar" inicialization="16 ** (numdigits - (byteindex*2))"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="lowerpowervar" inicialization="16 ** (numdigits - 2 - (byteindex*2))"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="postheadchop"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="remainder" inicialization="postheadchop % lowerpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="evenedout" inicialization="postheadchop - remainder"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="b" inicialization="evenedout / lowerpowervar"/>
+      <expressions>return byte</expressions>
+      <expressions>(b);</expressions>
+    </clauses>
+    <clauses name="getUint8FromByte32" constant="constant">
+      <inputParams typeSingularInput="bytes32" valueInput="_b32"/>
+      <inputParams typeSingularInput="uint8" valueInput="byteindex"/>
+      <outputParams type="uint8"/>
+      <conditions condition="byteindex == 0">
+        <expressions>postheadchop = buint;</expressions>
+        <expressionsElse>postheadchop = buint % upperpowervar;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" name="numdigits" inicialization="64"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="buint" inicialization="uint(_b32)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="upperpowervar" inicialization="16 ** (numdigits - (byteindex*2))"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="lowerpowervar" inicialization="16 ** (numdigits - 2 - (byteindex*2))"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="postheadchop"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="remainder" inicialization="postheadchop % lowerpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="evenedout" inicialization="postheadchop - remainder"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="b" inicialization="evenedout / lowerpowervar"/>
+      <expressions>return uint8(b);</expressions>
+    </clauses>
+    <clauses name="getDigitFromByte32" constant="constant">
+      <inputParams typeSingularInput="bytes32" valueInput="_b32"/>
+      <inputParams typeSingularInput="uint8" valueInput="index"/>
+      <outputParams type="uint"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="numdigits" inicialization="64"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="buint" inicialization="uint(_b32)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="upperpowervar" inicialization="16 ** (numdigits - index)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="lowerpowervar" inicialization="16 ** (numdigits - 1 - index)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="postheadchop" inicialization="buint % upperpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="remainder" inicialization="postheadchop % lowerpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="evenedout" inicialization="postheadchop - remainder"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="b" inicialization="evenedout / lowerpowervar"/>
+      <expressions>return b;</expressions>
+    </clauses>
+    <clauses name="getDigitFromUint" constant="constant">
+      <inputParams typeSingularInput="uint" valueInput="buint"/>
+      <inputParams typeSingularInput="uint8" valueInput="index"/>
+      <outputParams type="uint"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="numdigits" inicialization="64"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="upperpowervar" inicialization="10 ** (numdigits - index)"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="lowerpowervar" inicialization="10 ** (numdigits - 1 -index )"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="postheadchop" inicialization="buint % upperpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="remainder" inicialization="postheadchop % lowerpowervar"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="evenedout" inicialization="postheadchop - remainder"/>
+      <properties xsi:type="smaC:PropertyUInteger" name="b" inicialization="evenedout / lowerpowervar"/>
+      <expressions>return b;</expressions>
+    </clauses>
+    <clauses name="kill">
+      <conditions condition="msg.sender == creator">
+        <expressions>suicide(creator);</expressions>
+      </conditions>
+    </clauses>
+  </contracts>
+</smaC:File>
