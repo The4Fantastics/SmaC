@@ -5,6 +5,7 @@ In this directory, a series of smart contracts encoded with the SmaC tool are fo
 
 | Title | Info | Ecore Model
 | --- | --- | --- |
+| [Array Test](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/ArrayTest.sce) | Solidity program to  demonstrate use assert function | [Array Test](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/ArrayTest.xmi)
 | [Access Registration](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/AccessRegistration.sce) | Access Registration | [Access Registration model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/AccessRegistration.xmi)
 | [Auction](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Auction.sce) | Simulate an auction| [Auction model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/Auction.xmi)
 | [Penny Auction](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/PennyAuction.sce) | Simulate an penny auction where the bids are restricted to a fixed increment over the current high bid, and there is a fee to bid| [Penny Auction model](https://github.com/KybeleResearch/SmaC/blob/main/Example%20Models/PennyAuction.xmi)
