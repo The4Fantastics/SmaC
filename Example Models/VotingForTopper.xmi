@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.11"/>
+  <contracts name="VotingForTopper">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="owner"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" name="purpose"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="totalVotes"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="teamA"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="teamB"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="teamC"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" nameMapping="info" key="address " value="Voter"/>
+    <structs name="Voter">
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="authorized"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="voted"/>
+    </structs>
+    <constructors type="public">
+      <inputParams type="string" valueInput="_name"/>
+      <attributesInitialization>purpose = _name</attributesInitialization>
+      <attributesInitialization>owner = msg.sender</attributesInitialization>
+    </constructors>
+    <modifiers name="ownerOn">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="owner"/>
+    </modifiers>
+    <clauses name="authorize" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams type="address " valueInput="_person"/>
+      <expressions>info[_person].authorized= true;</expressions>
+    </clauses>
+    <clauses name="temaAF">
+      <inputParams type="address " valueInput="_address"/>
+      <restriction xsi:type="smaC:Restriction" expr1="info[_address].voted" message="&quot;Already voted person&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="info[_address].authorized" message="&quot;You Have No Right for Vote&quot;"/>
+      <expressions>info[_address].voted = true;</expressions>
+      <expressions>teamA++;</expressions>
+      <expressions>totalVotes++;</expressions>
+    </clauses>
+    <clauses name="temaBF">
+      <inputParams type="address " valueInput="_address"/>
+      <restriction xsi:type="smaC:Restriction" expr1="info[_address].voted" message="&quot;Already voted person&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="info[_address].authorized" message="&quot;You Have No Right for Vote&quot;"/>
+      <expressions>teamB++;</expressions>
+      <expressions>info[_address].voted = true;</expressions>
+      <expressions>totalVotes++;</expressions>
+    </clauses>
+    <clauses name="temaCF">
+      <inputParams type="address " valueInput="_address"/>
+      <outputParams type="string"/>
+      <restriction xsi:type="smaC:Restriction" expr1="info[_address].voted" message="&quot;Already voted person&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="info[_address].authorized" message="&quot;You Have No Right for Vote&quot;"/>
+      <expressions>info[_address].voted = true;</expressions>
+      <expressions>teamC++;</expressions>
+      <expressions>totalVotes++;</expressions>
+      <expressions>return(&quot;Thanks for Voting&quot;);</expressions>
+    </clauses>
+    <clauses name="totalVotesF">
+      <outputParams type="uint"/>
+      <expressions>return totalVotes;</expressions>
+    </clauses>
+    <clauses name="resultOfVoting">
+      <outputParams type="string"/>
+      <conditions condition="teamA>teamB &amp;&amp; teamA>teamC">
+        <expressions>return &quot;A is Winning&quot;;</expressions>
+      </conditions>
+      <conditions condition="teamA>teamB &amp;&amp; teamC>teamA">
+        <expressions>return &quot;C is Winning&quot;;</expressions>
+      </conditions>
+      <conditions condition="teamB>teamC">
+        <expressions>return &quot;B is Winning&quot;;</expressions>
+      </conditions>
+      <conditions condition="teamA==teamB &amp;&amp; teamA==teamC || teamB==teamC">
+        <expressions>return &quot;No One is Winning&quot;;</expressions>
+      </conditions>
+    </clauses>
+  </contracts>
+</smaC:File>
