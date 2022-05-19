@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <interfaces name="ISayHello">
+    <interfaceFunction name="getAge" modifier="view">
+      <outputParams type="uint256"/>
+    </interfaceFunction>
+    <interfaceFunction name="setAge">
+      <inputParams type="uint256" valueInput="_age"/>
+    </interfaceFunction>
+    <interfaceFunction name="makeMeSayHello" modifier="view">
+      <outputParams type="string"/>
+    </interfaceFunction>
+  </interfaces>
+  <contracts name="HelloAgain" superType="//@interfaces.0">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" name="age"/>
+    <clauses name="getAge" predefinedModifier="pure" override="override">
+      <outputParams type="uint256"/>
+      <expressions>return 33;</expressions>
+    </clauses>
+    <clauses name="setAge" override="override">
+      <inputParams type="uint256" valueInput="_age"/>
+      <expressions>age = _age;</expressions>
+    </clauses>
+    <clauses name="makeMeSayHello" predefinedModifier="pure" override="override">
+      <outputParams type="string"/>
+      <expressions>return &quot;Hello again&quot;;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
