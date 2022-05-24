@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">=" numberVersion="0.4.22" symbolComparation="&lt;" numberVersion2="0.7.0"/>
+  <library name="Balances">
+    <functions name="move" visibilityAccess="internal">
+      <inputParams xsi:type="smaC:MappingDeclaration" type="mapping" key="address " value="uint256"/>
+      <inputParams valueInput="_balances"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balances[_from]" operator=">=" expr2="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balances[to] + amount" operator=">=" expr2="balances[to]"/>
+      <expressions>_balances[_from] -= amount;</expressions>
+      <expressions>_balances[to] += amount;</expressions>
+    </functions>
+  </library>
+  <contracts name="Token" libraries="//@library.0">
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" nameMapping="balances" key="address " value="uint256"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" nameMapping="allowed" key="address ">
+      <valueIdentifier type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <events name="Transfer">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint" valueInput="amount"/>
+    </events>
+    <events name="Approval">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint" valueInput="amount"/>
+    </events>
+    <clauses name="balanceOf">
+      <inputParams type="address " valueInput="tokenOwner"/>
+      <outputParams type="uint" value="_balance"/>
+      <expressions>return balances[tokenOwner];</expressions>
+    </clauses>
+    <clauses name="transfer" event="//@contracts.0/@events.0">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint" valueInput="amount"/>
+      <outputParams type="bool" value="success"/>
+      <expressions>balances.move(msg.sender, to, amount);</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="to"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="transferFrom" event="//@contracts.0/@events.0">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint" valueInput="amount"/>
+      <outputParams type="bool" value="success"/>
+      <restriction xsi:type="smaC:Restriction" expr1="allowed[_from][msg.sender]" operator=">=" expr2="amount"/>
+      <expressions>allowed[_from][msg.sender] -= amount;</expressions>
+      <expressions>balances.move(_from, to, amount);</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="_from"/>
+      <inputParamsEvent valueInput="to"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="approve" event="//@contracts.0/@events.1">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint" valueInput="tokens"/>
+      <outputParams type="bool" value="success"/>
+      <restriction xsi:type="smaC:Restriction" expr1="allowed[msg.sender][spender]" operator="==" expr2="0" message="&quot;&quot;"/>
+      <expressions>allowed[msg.sender][spender] = tokens;</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="spender"/>
+      <inputParamsEvent valueInput="tokens"/>
+    </clauses>
+  </contracts>
+</smaC:File>
