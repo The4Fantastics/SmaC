@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.16"/>
+  <contracts name="Ballot">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="chairperson"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="Proposal" array="[]" name="proposals"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" nameMapping="voters" key="address " value="Voter"/>
+    <structs name="Voter">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="weight"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="voted"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="delegate"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="vote"/>
+    </structs>
+    <structs name="Proposal">
+      <properties xsi:type="smaC:PropertyBytes" type="bytes32" name="name"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="voteCount"/>
+    </structs>
+    <clauses name="Ballot">
+      <inputParams type="bytes32" valueInput="proposalNames"/>
+      <determinedloops typeCounter="uint" nameCounter="i" condition="i &lt; proposalNames.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="100" typeCoin="szabo"/>
+        <expressions>proposals.push(Proposal({ name: proposalNames[i], voteCount: 0 }) ) ;</expressions>
+      </determinedloops>
+      <expressions>chairperson = msg.sender;</expressions>
+      <expressions>voters[chairperson].weight = 1;</expressions>
+    </clauses>
+    <clauses name="giveRightToVote">
+      <inputParams type="address " valueInput="voter"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="chairperson"/>
+      <restriction xsi:type="smaC:Restriction" expr1="voters[voter].voted"/>
+      <restriction xsi:type="smaC:Restriction" expr1="voters[voter].weight" operator="==" expr2="0"/>
+      <expressions>voters[voter].weight = 1;</expressions>
+    </clauses>
+    <clauses name="delegate">
+      <inputParams type="address " valueInput="to"/>
+      <restriction xsi:type="smaC:Restriction" expr1="sender.voted"/>
+      <restriction xsi:type="smaC:Restriction" expr1="to" operator="!=" expr2="msg.sender"/>
+      <conditions condition="delegate_.voted">
+        <expressions>proposals[delegate_.vote].voteCount += sender.weight;</expressions>
+        <expressionsElse>delegate_.weight += sender.weight;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyIdentifier" type="Voter" storageData="storage" name="sender" inicialization="voters[msg.sender]"/>
+      <properties xsi:type="smaC:PropertyIdentifier" type="Voter" storageData="storage" name="delegate_" inicialization="voters[to]"/>
+      <undeterminedloops xsi:type="smaC:WhileLoop" condition="voters[to].delegate != address(0)">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="100" typeCoin="szabo"/>
+        <restriction xsi:type="smaC:Restriction" expr1="to" operator="!=" expr2="msg.sender"/>
+        <expressions>to = voters[to].delegate;</expressions>
+      </undeterminedloops>
+      <expressions>sender.voted = true;</expressions>
+      <expressions>sender.delegate = to;</expressions>
+    </clauses>
+    <clauses name="vote">
+      <inputParams type="uint" valueInput="proposal"/>
+      <restriction xsi:type="smaC:Restriction" expr1="sender.voted"/>
+      <properties xsi:type="smaC:PropertyIdentifier" type="Voter" storageData="storage" name="sender" inicialization="voters[msg.sender]"/>
+      <expressions>sender.voted = true;</expressions>
+      <expressions>sender.vote = proposal;</expressions>
+      <expressions>proposals[proposal].voteCount += sender.weight;</expressions>
+    </clauses>
+    <clauses name="winningProposal">
+      <outputParams type="uint" value="winningProposal_"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="winningVoteCount" inicialization="0"/>
+      <determinedloops typeCounter="uint" nameCounter="p" condition="p &lt; proposals.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="100" typeCoin="szabo"/>
+        <conditions condition="proposals[p].voteCount > winningVoteCount">
+          <expressions>winningVoteCount = proposals[p].voteCount;</expressions>
+          <expressions>winningProposal_ = p;</expressions>
+        </conditions>
+      </determinedloops>
+    </clauses>
+    <clauses name="winnerName">
+      <outputParams type="bytes32" value="winnerName_"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="numberProposal" inicialization="winningProposal()"/>
+      <expressions>winnerName_ = proposals[numberProposal].name;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
