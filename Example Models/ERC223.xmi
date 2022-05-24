@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <imports name="&quot;https://github.com/Dexaran/ERC223-token-standard/blob/development/token/ERC223/IERC223.sol&quot;"/>
+  <imports name="&quot;https://github.com/Dexaran/ERC223-token-standard/blob/development/token/ERC223/IERC223Recipient.sol&quot;"/>
+  <imports name="&quot;https://github.com/Dexaran/ERC223-token-standard/blob/development/utils/Address.sol&quot;"/>
+  <abstractContracts name="IERC223">
+    <events name="Transfer">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="_from"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="to"/>
+      <inputParams type="uint" valueInput="value"/>
+    </events>
+    <events name="TransferData">
+      <inputParams type="bytes" valueInput="data"/>
+    </events>
+    <clauses name="name" modifier="view" virtual="virtual">
+      <outputParams type="string"/>
+    </clauses>
+    <clauses name="symbol" modifier="view" virtual="virtual">
+      <outputParams type="string"/>
+    </clauses>
+    <clauses name="standard" modifier="view" virtual="virtual">
+      <outputParams type="string"/>
+    </clauses>
+    <clauses name="decimals" modifier="view" virtual="virtual">
+      <outputParams type="uint8"/>
+    </clauses>
+    <clauses name="totalSupply" modifier="view" virtual="virtual">
+      <outputParams type="uint256"/>
+    </clauses>
+    <clauses name="balanceOf" modifier="view" virtual="virtual">
+      <inputParams type="address " valueInput="who"/>
+      <outputParams type="uint"/>
+    </clauses>
+    <clauses name="transfer" virtual="virtual">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint" valueInput="value"/>
+      <outputParams type="bool" value="success"/>
+    </clauses>
+    <clauses name="transfer" virtual="virtual">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint" valueInput="value"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="data"/>
+      <outputParams type="bool" value="success"/>
+    </clauses>
+  </abstractContracts>
+  <contracts name="ERC223Token" superType="//@abstractContracts.0">
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="private" name="_name"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="private" name="_symbol"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint8" visibility="private" name="_decimals"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="private" name="_totalSupply"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" nameMapping="balances" key="address " value="uint256"/>
+    <constructors type="public">
+      <inputParams type="string" valueInput="new_name"/>
+      <inputParams type="string" valueInput="new_symbol"/>
+      <inputParams type="uint8" valueInput="new_decimals"/>
+      <attributesInitialization>_name = new_name</attributesInitialization>
+      <attributesInitialization>_symbol = new_symbol</attributesInitialization>
+      <attributesInitialization>_decimals = new_decimals</attributesInitialization>
+    </constructors>
+    <events name="Transfer">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="_from"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="to"/>
+      <inputParams type="uint" valueInput="value"/>
+    </events>
+    <events name="TransferData">
+      <inputParams type="bytes" valueInput="data"/>
+    </events>
+    <clauses name="standard" predefinedModifier="pure" override="override">
+      <outputParams type="string"/>
+      <expressions>return &quot;erc223&quot;;</expressions>
+    </clauses>
+    <clauses name="name" override="override">
+      <outputParams type="string"/>
+      <expressions>return _name;</expressions>
+    </clauses>
+    <clauses name="symbol" override="override">
+      <outputParams type="string"/>
+      <expressions>return _symbol;</expressions>
+    </clauses>
+    <clauses name="decimals" override="override">
+      <outputParams type="uint8"/>
+      <expressions>return _decimals;</expressions>
+    </clauses>
+    <clauses name="totalSupply" override="override">
+      <outputParams type="uint256"/>
+      <expressions>return _totalSupply;</expressions>
+    </clauses>
+    <clauses name="balanceOf" override="override">
+      <inputParams type="address " valueInput="_owner"/>
+      <outputParams type="uint256"/>
+      <expressions>return balances[_owner];</expressions>
+    </clauses>
+    <clauses name="transfer" override="override" event="//@contracts.0/@events.0 //@contracts.0/@events.1">
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint" valueInput="_value"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_data"/>
+      <outputParams type="bool" value="success"/>
+      <conditions condition="Address.isContract(_to)">
+        <expressions>IERC223Recipient(_to).tokenReceived(msg.sender, _value, _data);</expressions>
+      </conditions>
+      <expressions>balances[msg.sender] = balances[msg.sender] - _value;</expressions>
+      <expressions>balances[_to] = balances[_to] + _value;</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="_to"/>
+      <inputParamsEvent valueInput="_value"/>
+      <inputParamsEvent valueInput="_data"/>
+    </clauses>
+    <clauses name="transfer" override="override" event="//@contracts.0/@events.0 //@contracts.0/@events.1">
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint" valueInput="_value"/>
+      <outputParams type="bool" value="success"/>
+      <conditions condition="Address.isContract(_to)">
+        <expressions>IERC223Recipient(_to).tokenReceived(msg.sender, _value, _empty);</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="_empty" inicialization="hex&quot;00000000&quot;"/>
+      <expressions>balances[msg.sender] = balances[msg.sender] - _value;</expressions>
+      <expressions>balances[_to] = balances[_to] + _value;</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="_to"/>
+      <inputParamsEvent valueInput="_value"/>
+      <inputParamsEvent valueInput="_empty"/>
+    </clauses>
+  </contracts>
+</smaC:File>
