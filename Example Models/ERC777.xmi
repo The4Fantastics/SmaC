@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">" numberVersion="0.5.3"/>
+  <imports name="&quot;https://github.com/0xjac/ERC1820/blob/master/contracts/ERC1820Client.sol&quot;"/>
+  <imports name="&quot;https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol&quot;"/>
+  <imports name="&quot;https://github.com/0xjac/ERC777/blob/devel/contracts/ERC777Token.sol&quot;"/>
+  <imports name="&quot;https://github.com/0xjac/ERC777/blob/devel/contracts/ERC777TokensSender.sol&quot;"/>
+  <imports name="&quot;https://github.com/0xjac/ERC777/blob/devel/contracts/ERC777TokensRecipient.sol&quot;"/>
+  <contracts name="ERC777BaseToken">
+    <superType href="/Models/ERC777.sce#|0"/>
+    <superType href="/Models/ERC777.sce#|1"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="internal" name="mName"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="internal" name="mSymbol"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="internal" name="mGranularity"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="internal" name="mTotalSupply"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " array="[]" visibility="internal" name="mDefaultOperators"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" visibility="internal" nameMapping="mBalances" key="address " value="uint"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" visibility="internal" nameMapping="mIsDefaultOperator" key="address " value="bool"/>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" visibility="internal" nameMapping="mRevokedDefaultOperator" key="address ">
+      <valueIdentifier type="mapping" key="address " value="bool"/>
+    </localMappingProperties>
+    <localMappingProperties xsi:type="smaC:MappingDeclaration" type="mapping" visibility="internal" nameMapping="mAuthorizedOperators" key="address ">
+      <valueIdentifier type="mapping" key="address " value="bool"/>
+    </localMappingProperties>
+    <libraries href="/Models/ERC777.sce#|2"/>
+    <constructors type="internal">
+      <inputParams type="string" valueInput="_name"/>
+      <inputParams type="string" valueInput="_symbol"/>
+      <inputParams type="uint256" valueInput="_granularity"/>
+      <inputParams type="address " valueInput="_defaultOperators"/>
+      <restrictions xsi:type="smaC:Restriction" expr1="_granularity" operator=">=" expr2="1" message="&quot;Granularity must be > 1&quot;"/>
+      <determinedLoops typeCounter="uint" nameCounter="i" condition="i &lt; mDefaultOperators.length">
+        <gasrestriction expr1="msg.sender.balance" amount="2300" typeCoin="wei"/>
+        <expressions>mIsDefaultOperator[mDefaultOperators[i]] = true;</expressions>
+      </determinedLoops>
+      <attributesInitialization>mName = _name</attributesInitialization>
+      <attributesInitialization>mSymbol = _symbol</attributesInitialization>
+      <attributesInitialization>mTotalSupply = 0</attributesInitialization>
+      <attributesInitialization>mGranularity = _granularity</attributesInitialization>
+      <attributesInitialization>mDefaultOperators = _defaultOperators</attributesInitialization>
+      <attributesInitialization>setInterfaceImplementation(&quot;ERC777Token&quot;, address(this))</attributesInitialization>
+    </constructors>
+    <events name="Sent">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="operator"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="_from"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="bytes" valueInput="operatorData"/>
+    </events>
+    <events name="Minted">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="operator"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="bytes" valueInput="operatorData"/>
+    </events>
+    <events name="Burned">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="operator"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="_from"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="bytes" valueInput="operatorData"/>
+    </events>
+    <events name="AuthorizedOperator">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="operator"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="tokenHolder"/>
+    </events>
+    <events name="RevokedOperator">
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="operator"/>
+      <inputParams type="address " valueInput="indexed"/>
+      <inputParams valueInput="tokenHolder"/>
+    </events>
+    <clauses name="name">
+      <outputParams type="string"/>
+      <expressions>return mName;</expressions>
+    </clauses>
+    <clauses name="symbol">
+      <outputParams type="string"/>
+      <expressions>return mSymbol;</expressions>
+    </clauses>
+    <clauses name="granularity">
+      <outputParams type="uint256"/>
+      <expressions>return mGranularity;</expressions>
+    </clauses>
+    <clauses name="totalSupply">
+      <outputParams type="uint256"/>
+      <expressions>return mTotalSupply;</expressions>
+    </clauses>
+    <clauses name="balanceOf">
+      <inputParams type="address " valueInput="_tokenHolder"/>
+      <outputParams type="uint256"/>
+      <expressions>return mBalances[_tokenHolder];</expressions>
+    </clauses>
+    <clauses name="defaultOperators">
+      <outputParams type="address " array="[]"/>
+      <expressions>return mDefaultOperators;</expressions>
+    </clauses>
+    <clauses name="send" visibilityAccess="external">
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_data"/>
+      <expressions>doSend(msg.sender, msg.sender, _to, _amount, _data, &quot;&quot;, true);</expressions>
+    </clauses>
+    <clauses name="authorizeOperator" visibilityAccess="external" event="//@contracts.0/@events.3">
+      <inputParams type="address " valueInput="_operator"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_operator" operator="!=" expr2="msg.sender" message="&quot;Cannot authorize yourself as an operator&quot;"/>
+      <conditions condition="mIsDefaultOperator[_operator]">
+        <expressions>mRevokedDefaultOperator[_operator][msg.sender] = false;</expressions>
+        <expressionsElse>mAuthorizedOperators[_operator][msg.sender] = true;</expressionsElse>
+      </conditions>
+      <inputParamsEvent valueInput="_operator"/>
+      <inputParamsEvent valueInput="msg.sender"/>
+    </clauses>
+    <clauses name="revokeOperator" visibilityAccess="external" event="//@contracts.0/@events.4">
+      <inputParams type="address " valueInput="_operator"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_operator" operator="!=" expr2="msg.sender" message="&quot;Cannot revoke yourself as an operator&quot;"/>
+      <conditions condition="mIsDefaultOperator[_operator]">
+        <expressions>mRevokedDefaultOperator[_operator][msg.sender] = true;</expressions>
+        <expressionsElse>mAuthorizedOperators[_operator][msg.sender] = false;</expressionsElse>
+      </conditions>
+      <inputParamsEvent valueInput="_operator"/>
+      <inputParamsEvent valueInput="msg.sender"/>
+    </clauses>
+    <clauses name="isOperatorFor">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_tokenHolder"/>
+      <outputParams type="bool"/>
+      <conditions condition="_operator == _tokenHolder">
+        <expressions>return true;</expressions>
+      </conditions>
+      <conditions condition="mAuthorizedOperators[_operator][_tokenHolder]">
+        <expressions>return true;</expressions>
+      </conditions>
+      <conditions condition="!mRevokedDefaultOperator[_operator][_tokenHolder] &amp;&amp; mIsDefaultOperator[_operator]">
+        <expressions>return true;</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="operatorSend" visibilityAccess="external">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_data"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_operatorData"/>
+      <restriction xsi:type="smaC:Restriction" expr1="isOperatorFor(msg.sender, _from)" message="&quot;Not an operator&quot;"/>
+      <expressions>doSend(msg.sender, _from, _to, _amount, _data, _operatorData, true);</expressions>
+    </clauses>
+    <clauses name="burn" visibilityAccess="external">
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_data"/>
+      <expressions>doBurn(msg.sender, msg.sender, _amount, _data, &quot;&quot;);</expressions>
+    </clauses>
+    <clauses name="operatorBurn" visibilityAccess="external">
+      <inputParams type="address " valueInput="_tokenHolder"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_data"/>
+      <inputParams type="bytes" valueInput="calldata"/>
+      <inputParams valueInput="_operatorData"/>
+      <restriction xsi:type="smaC:Restriction" expr1="isOperatorFor(msg.sender, _tokenHolder)" message="&quot;Not an operator&quot;"/>
+      <expressions>doBurn(msg.sender, _tokenHolder, _amount, _data, _operatorData);</expressions>
+    </clauses>
+    <clauses name="requireMultiple" visibilityAccess="internal">
+      <inputParams type="uint256" valueInput="_amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_amount % mGranularity" operator="==" expr2="0" message="&quot;Amount is not a multiple of granualrity&quot;"/>
+    </clauses>
+    <clauses name="isRegularAddress" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_addr"/>
+      <outputParams type="bool"/>
+      <conditions condition="_addr == address(0)">
+        <expressions>return false;</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="size"/>
+      <expressions>assembly { size := extcodesize(_addr) }</expressions>
+      <expressions>return size == 0;</expressions>
+    </clauses>
+    <clauses name="doSend" visibilityAccess="internal" event="//@contracts.0/@events.0">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <inputParams type="bytes" valueInput="_operatorData"/>
+      <inputParams type="bool" valueInput="_preventLocking"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_to" operator="!=" expr2="address(0)" message="&quot;Cannot send to 0x0&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="mBalances[_from]" operator=">=" expr2="_amount" message="&quot;Not enough funds&quot;"/>
+      <expressions>requireMultiple(_amount);</expressions>
+      <expressions>callSender(_operator, _from, _to, _amount, _data, _operatorData);</expressions>
+      <expressions>mBalances[_from] = mBalances[_from].sub</expressions>
+      <expressions>(_amount);</expressions>
+      <expressions>mBalances[_to] = mBalances[_to].add</expressions>
+      <expressions>(_amount);</expressions>
+      <expressions>callRecipient(_operator, _from, _to, _amount, _data, _operatorData, _preventLocking);</expressions>
+      <inputParamsEvent valueInput="_operator"/>
+      <inputParamsEvent valueInput="_from"/>
+      <inputParamsEvent valueInput="_to"/>
+      <inputParamsEvent valueInput="_amount"/>
+      <inputParamsEvent valueInput="_data"/>
+      <inputParamsEvent valueInput="_operatorData"/>
+    </clauses>
+    <clauses name="doBurn" visibilityAccess="internal" event="//@contracts.0/@events.2">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_tokenHolder"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <inputParams type="bytes" valueInput="_operatorData"/>
+      <restriction xsi:type="smaC:Restriction" expr1="balanceOf(_tokenHolder)" operator=">=" expr2="_amount" message="&quot;Not enough funds&quot;"/>
+      <expressions>callSender(_operator, _tokenHolder, address(0), _amount, _data, _operatorData);</expressions>
+      <expressions>requireMultiple(_amount);</expressions>
+      <expressions>mBalances[_tokenHolder] = mBalances[_tokenHolder].sub</expressions>
+      <expressions>(_amount);</expressions>
+      <expressions>mTotalSupply = mTotalSupply.sub</expressions>
+      <expressions>(_amount);</expressions>
+      <inputParamsEvent valueInput="_operator"/>
+      <inputParamsEvent valueInput="_tokenHolder"/>
+      <inputParamsEvent valueInput="_amount"/>
+      <inputParamsEvent valueInput="_data"/>
+      <inputParamsEvent valueInput="_operatorData"/>
+    </clauses>
+    <clauses name="callRecipient" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <inputParams type="bytes" valueInput="_operatorData"/>
+      <inputParams type="bool" valueInput="_preventLocking"/>
+      <conditions condition="recipientImplementation != address(0)">
+        <expressions>ERC777TokensRecipient(recipientImplementation).tokensReceived( _operator, _from, _to, _amount, _data, _operatorData) ;</expressions>
+        <conditionalExprElse condition="_preventLocking">
+          <conditionalExpr condition="isRegularAddress(_to)">
+            <expressions>revert(&quot;Cannot send to contract without ERC777TokensRecipient&quot;);</expressions>
+          </conditionalExpr>
+        </conditionalExprElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="recipientImplementation" inicialization="interfaceAddr(_to, &quot;ERC777TokensRecipient&quot;)"/>
+    </clauses>
+    <clauses name="callSender" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_amount"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <inputParams type="bytes" valueInput="_operatorData"/>
+      <conditions condition="senderImplementation == address(0)">
+        <expressions>return;</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="senderImplementation" inicialization="interfaceAddr(_from, &quot;ERC777TokensSender&quot;)"/>
+      <expressions>ERC777TokensSender(senderImplementation).tokensToSend( _operator, _from, _to, _amount, _data, _operatorData) ;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
