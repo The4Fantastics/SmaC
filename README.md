@@ -17,7 +17,7 @@ _______________
 **ScreenCast**
 _______________
 
-![Purchase smart contract encoded with SmaC]()
+![Purchase smart contract encoded with SmaC](https://github.com/KybeleResearch/SmaC/blob/main/Videos/Images/PurchaseSMAC.png)
 
 **Install SmaC from Update Site🔧**
 _______________
