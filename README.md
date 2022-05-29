@@ -17,7 +17,7 @@ _______________
 **ScreenCast**
 _______________
 
-![Purchase smart contract encoded with SmaC](https://github.com/CristianGM23/SmaC/blob/master/PurchaseTogether.png)
+![Purchase smart contract encoded with SmaC]()
 
 **Install SmaC from Update Site🔧**
 _______________
