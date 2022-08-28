@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <imports name="&quot;./Common.sol&quot;"/>
+  <interfaces name="ERC1155TokenReceiver">
+    <interfaceFunction name="onERC1155Received">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <outputParams type="bytes4"/>
+    </interfaceFunction>
+    <interfaceFunction name="onERC1155BatchReceived">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_values"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <outputParams type="bytes4"/>
+    </interfaceFunction>
+  </interfaces>
+  <contracts name="ERC1155MockReceiver">
+    <superType href="/SmartContracts/EMF-src-generated/ERC1155MockReceiver.xmi#//@interfaces.0"/>
+    <superType href="/SmartContracts/ERC1155MockReceiver.sce#|1"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" type="bool" name="shouldReject"/>
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes" name="lastData"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="lastOperator"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="lastFrom"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" name="lastId"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" name="lastValue"/>
+    <clauses name="setShouldReject">
+      <inputParams type="bool" valueInput="_value"/>
+      <expressions>shouldReject = _value;</expressions>
+    </clauses>
+    <clauses name="onERC1155Received" visibilityAccess="external">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <outputParams type="bytes4"/>
+      <conditions condition="shouldReject == true">
+        <expressions>revert(&quot;onERC1155Received: transfer not accepted&quot;);</expressions>
+        <expressionsElse>return ERC1155_ACCEPTED;</expressionsElse>
+      </conditions>
+      <expressions>lastOperator = _operator;</expressions>
+      <expressions>lastFrom = _from;</expressions>
+      <expressions>lastId = _id;</expressions>
+      <expressions>lastValue = _value;</expressions>
+      <expressions>lastData = _data;</expressions>
+    </clauses>
+    <clauses name="onERC1155BatchReceived" visibilityAccess="external">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_values"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <outputParams type="bytes4"/>
+      <conditions condition="shouldReject == true">
+        <expressions>revert(&quot;onERC1155BatchReceived: transfer not accepted&quot;);</expressions>
+        <expressionsElse>return ERC1155_BATCH_ACCEPTED;</expressionsElse>
+      </conditions>
+      <expressions>lastOperator = _operator;</expressions>
+      <expressions>lastFrom = _from;</expressions>
+      <expressions>lastId = _ids[0];</expressions>
+      <expressions>lastValue = _values[0];</expressions>
+      <expressions>lastData = _data;</expressions>
+    </clauses>
+    <clauses name="supportsInterface" visibilityAccess="external">
+      <inputParams type="bytes4" valueInput="interfaceID"/>
+      <outputParams type="bool"/>
+      <conditions condition="interfaceID == 0x01ffc9a7">
+        <expressions>return true;</expressions>
+      </conditions>
+      <conditions condition="interfaceID == 0x4e2312e0">
+        <expressions>return true;</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="ok"/>
+      <expressions>return false;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

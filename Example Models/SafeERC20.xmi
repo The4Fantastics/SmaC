@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <imports name="&quot;../IERC20.sol&quot;"/>
+  <imports name="&quot;../extensions/draft-IERC20Permit.sol&quot;"/>
+  <imports name="&quot;../../../utils/Address.sol&quot;"/>
+  <contracts name="SafeERC20">
+    <libraries href="/SmartContracts/SafeERC20.sce#|0"/>
+    <clauses name="safeTransfer" visibilityAccess="internal">
+      <inputParams type="IERC20" valueInput="token"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <expressions>_callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));</expressions>
+    </clauses>
+    <clauses name="safeTransferFrom" visibilityAccess="internal">
+      <inputParams type="IERC20" valueInput="token"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <expressions>_callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, _from, to, value));</expressions>
+    </clauses>
+    <clauses name="safeApprove" visibilityAccess="internal">
+      <inputParams type="IERC20" valueInput="token"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <conditions condition="value == 0 || newAllowance == 0">
+        <expressions>_callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));</expressions>
+        <expressionsElse>revert(&quot;SafeERC20: approve from non-zero to non-zero allowance&quot;);</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="newAllowance" inicialization="token.allowance(address(this), spender)"/>
+    </clauses>
+    <clauses name="safeIncreaseAllowance" visibilityAccess="internal">
+      <inputParams type="IERC20" valueInput="token"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="newAllowance" inicialization="token.allowance(address(this), spender)"/>
+      <expressions>newAllowance = newAllowance + value;</expressions>
+      <expressions>_callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));</expressions>
+    </clauses>
+    <clauses name="safeDecreaseAllowance" visibilityAccess="internal">
+      <inputParams type="IERC20" valueInput="token"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <restriction xsi:type="smaC:Restriction" expr1="oldAllowance" operator=">=" expr2="value" message="&quot;SafeERC20: decreased allowance below zero&quot;"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="oldAllowance" inicialization="token.allowance(address(this), spender)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="newAllowance" inicialization="oldAllowance - value"/>
+      <expressions>_callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));</expressions>
+    </clauses>
+    <clauses name="safePermit" visibilityAccess="internal">
+      <inputParams type="IERC20Permit" valueInput="token"/>
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <inputParams type="uint256" valueInput="deadline"/>
+      <inputParams type="uint8" valueInput="v"/>
+      <inputParams type="bytes32" valueInput="r"/>
+      <inputParams type="bytes32" valueInput="s"/>
+      <restriction xsi:type="smaC:Restriction" expr1="nonceAfter" operator="==" expr2="nonceBefore + 1" message="&quot;SafeERC20: permit did not succeed&quot;"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="nonceBefore" inicialization="token.nonces(owner)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="nonceAfter" inicialization="token.nonces(owner)"/>
+      <expressions>token.permit(owner, spender, value, deadline, v, r, s);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

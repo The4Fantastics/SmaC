@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="Timers">
+    <structs name="Timestamp">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint64" name="_deadline"/>
+    </structs>
+    <structs name="BlockNumber">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint64" name="_deadline"/>
+    </structs>
+    <clauses name="getDeadline" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="Timestamp" valueInput="timer"/>
+      <outputParams type="uint64"/>
+      <expressions>return timer._deadline;</expressions>
+    </clauses>
+    <clauses name="setDeadline" visibilityAccess="internal">
+      <inputParams type="Timestamp" storageData="storage" valueInput="timer"/>
+      <inputParams type="uint64" valueInput="timestamp"/>
+      <expressions>timer._deadline = timestamp;</expressions>
+    </clauses>
+    <clauses name="reset" visibilityAccess="internal">
+      <inputParams type="Timestamp" storageData="storage" valueInput="timer"/>
+      <expressions>timer._deadline = 0;</expressions>
+    </clauses>
+    <clauses name="isUnset" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="Timestamp" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <expressions>return timer._deadline == 0;</expressions>
+    </clauses>
+    <clauses name="isStarted" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="Timestamp" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <expressions>return timer._deadline > 0;</expressions>
+    </clauses>
+    <clauses name="isPending" visibilityAccess="internal">
+      <inputParams type="Timestamp" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <expressions>return timer._deadline > block.timestamp;</expressions>
+    </clauses>
+    <clauses name="isExpired" visibilityAccess="internal">
+      <inputParams type="Timestamp" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <conditions condition="timer._deadline &lt;= block.timestamp &amp;&amp; isStart">
+        <expressions>return true;</expressions>
+        <expressionsElse>return false;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="isStart" inicialization="isStarted(timer)"/>
+    </clauses>
+    <clauses name="getDeadline" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="BlockNumber" valueInput="timer"/>
+      <outputParams type="uint64"/>
+      <expressions>return timer._deadline;</expressions>
+    </clauses>
+    <clauses name="setDeadline" visibilityAccess="internal">
+      <inputParams type="BlockNumber" storageData="storage" valueInput="timer"/>
+      <inputParams type="uint64" valueInput="timestamp"/>
+      <expressions>timer._deadline = timestamp;</expressions>
+    </clauses>
+    <clauses name="reset" visibilityAccess="internal">
+      <inputParams type="BlockNumber" storageData="storage" valueInput="timer"/>
+      <expressions>timer._deadline = 0;</expressions>
+    </clauses>
+    <clauses name="isUnset" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="BlockNumber" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <expressions>return timer._deadline == 0;</expressions>
+    </clauses>
+    <clauses name="isStarted" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="BlockNumber" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <expressions>return timer._deadline > 0;</expressions>
+    </clauses>
+    <clauses name="isPending" visibilityAccess="internal">
+      <inputParams type="BlockNumber" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <expressions>return timer._deadline > block.number;</expressions>
+    </clauses>
+    <clauses name="isExpired" visibilityAccess="internal">
+      <inputParams type="BlockNumber" valueInput="timer"/>
+      <outputParams type="bool"/>
+      <conditions condition="timer._deadline &lt;= block.number &amp;&amp; isStart">
+        <expressions>return true;</expressions>
+        <expressionsElse>return false;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="isStart" inicialization="isStarted(timer)"/>
+    </clauses>
+  </contracts>
+</smaC:File>

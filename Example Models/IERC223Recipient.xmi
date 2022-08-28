@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="IERC223Recipient">
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="ERC223TransferInfo" visibility="private" name="tkn"/>
+    <structs name="ERC223TransferInfo">
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="token_contract"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="sender"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="value"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="data"/>
+    </structs>
+    <clauses name="tokenReceived">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint" valueInput="_value"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <expressions>tkn.token_contract = msg.sender;</expressions>
+      <expressions>tkn.sender = _from ;</expressions>
+      <expressions>tkn.value = _value ;</expressions>
+      <expressions>tkn.data = _data ;</expressions>
+    </clauses>
+    <clauses name="tokenReceived">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint" valueInput="_value"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <expressions>tkn.token_contract = msg.sender;</expressions>
+      <expressions>tkn.sender = _from ;</expressions>
+      <expressions>tkn.value = _value ;</expressions>
+      <expressions>tkn.data = _data ;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

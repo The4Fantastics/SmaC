@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <library name="SafeMath">
+    <functions name="mul" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256" value="c"/>
+      <restriction xsi:type="smaC:Assert" expr1="c / a" operator="==" expr2="b"/>
+      <conditions condition="a == 0">
+        <expressions>return 0;</expressions>
+      </conditions>
+      <expressions>c = a * b;</expressions>
+      <expressions>return c;</expressions>
+    </functions>
+    <functions name="div" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <expressions>return a / b;</expressions>
+    </functions>
+    <functions name="sub" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <restriction xsi:type="smaC:Assert" expr1="b" operator="&lt;=" expr2="a"/>
+      <expressions>return a - b;</expressions>
+    </functions>
+    <functions name="add" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256" value="c"/>
+      <restriction xsi:type="smaC:Assert" expr1="c" operator=">=" expr2="a"/>
+      <expressions>c = a + b;</expressions>
+      <expressions>return c;</expressions>
+    </functions>
+  </library>
+  <library name="Address">
+    <functions name="isContract" visibilityAccess="internal">
+      <inputParams type="address " valueInput="account"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="size"/>
+      <expressions>assembly { size := extcodesize(account) }</expressions>
+      <expressions>return size > 0;</expressions>
+    </functions>
+  </library>
+  <interfaces name="ERC1155TokenReceiver">
+    <interfaceFunction name="onERC1155Received">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <outputParams type="bytes4"/>
+    </interfaceFunction>
+    <interfaceFunction name="onERC1155BatchReceived">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_values"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <outputParams type="bytes4"/>
+    </interfaceFunction>
+  </interfaces>
+  <interfaces name="ERC165">
+    <interfaceFunction name="supportsInterface" modifier="view">
+      <inputParams type="bytes4" valueInput="_interfaceId"/>
+      <outputParams type="bool"/>
+    </interfaceFunction>
+  </interfaces>
+  <interfaces name="IERC1155">
+    <interfaceEvents name="TransferSingle">
+      <inputParams type="address " indexed="indexed" valueInput="_operator"/>
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+    </interfaceEvents>
+    <interfaceEvents name="TransferBatch">
+      <inputParams type="address " indexed="indexed" valueInput="_operator"/>
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="_to"/>
+      <inputParams type="uint256" array="[]" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" valueInput="_values"/>
+    </interfaceEvents>
+    <interfaceEvents name="ApprovalForAll">
+      <inputParams type="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams type="address " indexed="indexed" valueInput="_operator"/>
+      <inputParams type="bool" valueInput="_approved"/>
+    </interfaceEvents>
+    <interfaceEvents name="URI">
+      <inputParams type="string" valueInput="_value"/>
+      <inputParams type="uint256" indexed="indexed" valueInput="_id"/>
+    </interfaceEvents>
+    <interfaceFunction name="safeTransferFrom">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+    </interfaceFunction>
+    <interfaceFunction name="safeBatchTransferFrom">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_values"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+    </interfaceFunction>
+    <interfaceFunction name="balanceOf" modifier="view">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <outputParams type="uint256"/>
+    </interfaceFunction>
+    <interfaceFunction name="balanceOfBatch" modifier="view">
+      <inputParams type="address " array="[]" storageData="calldata" valueInput="_owners"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <outputParams type="uint256" array="[]"/>
+    </interfaceFunction>
+    <interfaceFunction name="setApprovalForAll">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="bool" valueInput="_approved"/>
+    </interfaceFunction>
+    <interfaceFunction name="isApprovedForAll" modifier="view">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="address " valueInput="_operator"/>
+      <outputParams type="bool"/>
+    </interfaceFunction>
+  </interfaces>
+  <contracts name="ERC1155" libraries="//@library.0 //@library.1">
+    <superType href="/SmartContracts/EMF-src-generated/ERC1155.xmi#//@interfaces.2"/>
+    <superType href="/SmartContracts/EMF-src-generated/ERC1155.xmi#//@interfaces.1"/>
+    <superType href="/SmartContracts/ERC1155.sce#|2"/>
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes4" constant="constant" visibility="private" name="INTERFACE_SIGNATURE_ERC165" inicialization="0x01ffc9a7"/>
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes4" constant="constant" visibility="private" name="INTERFACE_SIGNATURE_ERC1155" inicialization="0xd9b67a26"/>
+    <localMappingProperties visibility="internal" nameMapping="balances">
+      <type type="mapping" key="uint256">
+        <valueIdentifier type="mapping" key="address " value="uint256"/>
+      </type>
+    </localMappingProperties>
+    <localMappingProperties visibility="internal" nameMapping="operatorApproval">
+      <type type="mapping" key="address ">
+        <valueIdentifier type="mapping" key="address " value="bool"/>
+      </type>
+    </localMappingProperties>
+    <events name="TransferSingle">
+      <inputParams type="address " indexed="indexed" valueInput="_operator"/>
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+    </events>
+    <events name="TransferBatch">
+      <inputParams type="address " indexed="indexed" valueInput="_operator"/>
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="_to"/>
+      <inputParams type="uint256" array="[]" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" valueInput="_values"/>
+    </events>
+    <events name="ApprovalForAll">
+      <inputParams type="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams type="address " indexed="indexed" valueInput="_operator"/>
+      <inputParams type="bool" valueInput="_approved"/>
+    </events>
+    <events name="URI">
+      <inputParams type="string" valueInput="_value"/>
+      <inputParams type="uint256" indexed="indexed" valueInput="_id"/>
+    </events>
+    <clauses name="supportsInterface">
+      <inputParams type="bytes4" valueInput="_interfaceId"/>
+      <outputParams type="bool"/>
+      <conditions condition="_interfaceId == INTERFACE_SIGNATURE_ERC165 || _interfaceId == INTERFACE_SIGNATURE_ERC1155">
+        <expressions>return true;</expressions>
+      </conditions>
+      <expressions>return false;</expressions>
+    </clauses>
+    <clauses name="safeTransferFrom" visibilityAccess="external">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_to" operator="!=" expr2="address(0x0)" message="&quot;_to must be non-zero.&quot;"/>
+      <conditions condition="_from == msg.sender || operatorApproval[_from][msg.sender] == true" event="//@contracts.0/@events.0">
+        <expressions>balances[_id][_from] = balances[_id][_from].sub</expressions>
+        <expressions>(_value);</expressions>
+        <expressions>balances[_id][_to] = _value.add</expressions>
+        <expressions>(balances[_id][_to]);</expressions>
+        <conditionalExpr condition="_to.isContract()">
+          <expressions>_doSafeTransferAcceptanceCheck(msg.sender, _from, _to, _id, _value, _data);</expressions>
+        </conditionalExpr>
+        <inputParamsEvent valueInput="msg.sender"/>
+        <inputParamsEvent valueInput="_from"/>
+        <inputParamsEvent valueInput="_to"/>
+        <inputParamsEvent valueInput="_id"/>
+        <inputParamsEvent valueInput="_value"/>
+      </conditions>
+    </clauses>
+    <clauses name="safeBatchTransferFrom" visibilityAccess="external">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_values"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_to" operator="!=" expr2="address(0x0)" message="&quot;destination address must be non-zero.&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_ids.length" operator="==" expr2="_values.length" message="&quot;_ids and _values array length must match.&quot;"/>
+      <conditions condition="_from == msg.sender || operatorApproval[_from][msg.sender] == true" event="//@contracts.0/@events.1">
+        <conditionalExpr condition="_to.isContract()">
+          <expressions>_doSafeBatchTransferAcceptanceCheck(msg.sender, _from, _to, _ids, _values, _data);</expressions>
+        </conditionalExpr>
+        <determinedloops typeCounter="uint" nameCounter="i" condition="i &lt; _ids.length">
+          <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2400" typeCoin="wei"/>
+          <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="id" inicialization="_ids[i]"/>
+          <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="value" inicialization="_values[i]"/>
+          <expressions>balances[id][_from] = balances[id][_from].sub</expressions>
+          <expressions>(value);</expressions>
+          <expressions>balances[id][_to] = value.add</expressions>
+          <expressions>(balances[id][_to]);</expressions>
+        </determinedloops>
+        <inputParamsEvent valueInput="msg.sender"/>
+        <inputParamsEvent valueInput="_from"/>
+        <inputParamsEvent valueInput="_to"/>
+        <inputParamsEvent valueInput="_ids"/>
+        <inputParamsEvent valueInput="_values"/>
+      </conditions>
+    </clauses>
+    <clauses name="balanceOf" visibilityAccess="external">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <outputParams type="uint256"/>
+      <expressions>return balances[_id][_owner];</expressions>
+    </clauses>
+    <clauses name="balanceOfBatch" visibilityAccess="external">
+      <inputParams type="address " array="[]" storageData="calldata" valueInput="_owners"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <outputParams type="uint256" array="[]"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_owners.length" operator="==" expr2="_ids.length"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" array="[]" name="balances_" inicialization="new uint256[](_owners.length)"/>
+      <determinedloops typeCounter="uint" nameCounter="i" condition="i &lt; _owners.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2000" typeCoin="wei"/>
+        <expressions>balances_[i] = balances[_ids[i]][_owners[i]];</expressions>
+      </determinedloops>
+      <expressions>return balances_;</expressions>
+    </clauses>
+    <clauses name="setApprovalForAll" visibilityAccess="external" event="//@contracts.0/@events.2">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="bool" valueInput="_approved"/>
+      <expressions>operatorApproval[msg.sender][_operator] = _approved;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="_operator"/>
+      <inputParamsEvent valueInput="_approved"/>
+    </clauses>
+    <clauses name="isApprovedForAll" visibilityAccess="external">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="address " valueInput="_operator"/>
+      <outputParams type="bool"/>
+      <expressions>return operatorApproval[_owner][_operator];</expressions>
+    </clauses>
+    <clauses name="_doSafeTransferAcceptanceCheck" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <restriction xsi:type="smaC:Restriction" expr1="ERC1155TokenReceiver(_to).onERC1155Received(_operator, _from, _id, _value, _data)" operator="==" expr2="ERC1155_ACCEPTED" message="&quot;contract returned an unknown value from onERC1155Received&quot;"/>
+    </clauses>
+    <clauses name="_doSafeBatchTransferAcceptanceCheck" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" array="[]" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" valueInput="_values"/>
+      <inputParams type="bytes" valueInput="_data"/>
+      <restriction xsi:type="smaC:Restriction" expr1="ERC1155TokenReceiver(_to).onERC1155BatchReceived(_operator, _from, _ids, _values, _data)" operator="==" expr2="ERC1155_BATCH_ACCEPTED" message="&quot;contract returned an unknown value from onERC1155BatchReceived&quot;"/>
+    </clauses>
+  </contracts>
+</smaC:File>

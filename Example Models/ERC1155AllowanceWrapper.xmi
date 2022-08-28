@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <imports name="&quot;./IERC1155.sol&quot;"/>
+  <imports name="&quot;./ERC165.sol&quot;"/>
+  <imports name="&quot;./SafeMath.sol&quot;"/>
+  <contracts name="AllowanceWrapper">
+    <superType href="/SmartContracts/ERC1155AllowanceWrapper.sce#|0"/>
+    <superType href="/SmartContracts/ERC1155AllowanceWrapper.sce#|1"/>
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes4" constant="constant" visibility="private" name="INTERFACE_SIGNATURE_ERC165" inicialization="0x01ffc9a7"/>
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes4" constant="constant" visibility="private" name="INTERFACE_SIGNATURE_ERC1155" inicialization="0xd9b67a26"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="IERC1155" name="targetContract"/>
+    <localMappingProperties nameMapping="allowances">
+      <type type="mapping" key="address ">
+        <valueIdentifier type="mapping" key="address ">
+          <valueIdentifier type="mapping" key="uint256" value="uint256"/>
+        </valueIdentifier>
+      </type>
+    </localMappingProperties>
+    <libraries href="/SmartContracts/ERC1155AllowanceWrapper.sce#|2"/>
+    <constructors type="public">
+      <inputParams type="address " valueInput="_target"/>
+      <attributesInitialization>targetContract = IERC1155(_target);</attributesInitialization>
+    </constructors>
+    <events name="Approval">
+      <inputParams type="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams type="address " indexed="indexed" valueInput="_spender"/>
+      <inputParams type="uint256" indexed="indexed" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_oldValue"/>
+      <inputParams type="uint256" valueInput="_value"/>
+    </events>
+    <clauses name="approve" visibilityAccess="external" event="//@contracts.0/@events.0">
+      <inputParams type="address " valueInput="_spender"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_currentValue"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <restriction xsi:type="smaC:Restriction" expr1="allowances[msg.sender][_spender][_id]" operator="==" expr2="_currentValue"/>
+      <expressions>allowances[msg.sender][_spender][_id] = _value;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="_spender"/>
+      <inputParamsEvent valueInput="_id"/>
+      <inputParamsEvent valueInput="_currentValue"/>
+      <inputParamsEvent valueInput="_value"/>
+    </clauses>
+    <clauses name="allowance" visibilityAccess="external">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="address " valueInput="_spender"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <outputParams type="uint256"/>
+      <expressions>return allowances[_owner][_spender][_id];</expressions>
+    </clauses>
+    <clauses name="supportsInterface">
+      <inputParams type="bytes4" valueInput="_interfaceId"/>
+      <outputParams type="bool"/>
+      <conditions condition="_interfaceId == INTERFACE_SIGNATURE_ERC165 || _interfaceId == INTERFACE_SIGNATURE_ERC1155">
+        <expressions>return true;</expressions>
+      </conditions>
+      <expressions>return false;</expressions>
+    </clauses>
+    <clauses name="safeTransferFrom" visibilityAccess="external">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <inputParams type="uint256" valueInput="_value"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <conditions condition="msg.sender != _from">
+        <expressions>allowances[_from][msg.sender][_id] = allowances[_from][msg.sender][_id].sub</expressions>
+        <expressions>(_value);</expressions>
+      </conditions>
+      <expressions>targetContract.safeTransferFrom(_from, _to, _id, _value, _data);</expressions>
+    </clauses>
+    <clauses name="safeBatchTransferFrom" visibilityAccess="external">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="_to"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_ids"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_values"/>
+      <inputParams type="bytes" storageData="calldata" valueInput="_data"/>
+      <conditions condition="msg.sender != _from">
+        <determinedloops typeCounter="uint" nameCounter="i" condition="i &lt; _ids.length">
+          <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2400" typeCoin="wei"/>
+          <expressions>allowances[_from][msg.sender][_ids[i]] = allowances[_from][msg.sender][_ids[i]].sub</expressions>
+          <expressions>(_values[i]);</expressions>
+        </determinedloops>
+      </conditions>
+      <expressions>targetContract.safeBatchTransferFrom(_from, _to, _ids, _values, _data);</expressions>
+    </clauses>
+    <clauses name="balanceOf" visibilityAccess="external">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="uint256" valueInput="_id"/>
+      <outputParams type="uint256"/>
+      <expressions>return targetContract.balanceOf(_owner, _id);</expressions>
+    </clauses>
+    <clauses name="setApprovalForAll" visibilityAccess="external">
+      <inputParams type="address " valueInput="_operator"/>
+      <inputParams type="bool" valueInput="_approved"/>
+      <expressions>revert();</expressions>
+    </clauses>
+    <clauses name="isApprovedForAll" visibilityAccess="external">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="address " valueInput="_operator"/>
+      <outputParams type="bool"/>
+      <expressions>return targetContract.isApprovedForAll(_owner, _operator);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
