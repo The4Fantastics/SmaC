@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.4"/>
+  <contracts name="Donations">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="amount" inicialization="0"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="id" inicialization="0"/>
+    <localMappingProperties nameMapping="balances">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties nameMapping="donationsMap">
+      <type type="mapping" array="[]" key="address " value="Donation"/>
+    </localMappingProperties>
+    <structs name="Donation">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="id"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="amount"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="donor"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="message"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="timestamp"/>
+    </structs>
+    <clauses name="donate" predefinedModifier="payable">
+      <inputParams type="address " valueInput="_recipient"/>
+      <inputParams type="string" valueInput="_donor"/>
+      <inputParams type="string" valueInput="_msg"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.value" expr2="0" message="&quot;The donation needs to be >0 in order for it to go through&quot;"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="timestampLocal" inicialization="block.timestamp"/>
+      <expressions>amount = msg.value;</expressions>
+      <expressions>balances[_recipient] += amount;</expressions>
+      <expressions>id = id+1;</expressions>
+      <expressions>Donation memory donation = new Donation(id,amount,_donor,_msg,timestampLocal);</expressions>
+      <expressions>donationsMap[_recipient].push</expressions>
+      <expressions>(donation);</expressions>
+    </clauses>
+    <clauses name="withdraw">
+      <restriction xsi:type="smaC:Restriction" expr1="amount" expr2="0" message="&quot;Your current balance is 0&quot;"/>
+      <expressions>amount = balances[msg.sender];</expressions>
+      <expressions>balances[msg.sender] -= amount;</expressions>
+      <expressions>msg.sender.transfer(amount);</expressions>
+    </clauses>
+    <clauses name="balances_getter">
+      <inputParams type="address " valueInput="_recipient"/>
+      <outputParams type="uint"/>
+      <expressions>return balances[_recipient];</expressions>
+    </clauses>
+    <clauses name="getBalance">
+      <outputParams type="uint"/>
+      <expressions>return msg.sender.balance;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
