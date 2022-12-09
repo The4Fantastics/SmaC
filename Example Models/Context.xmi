@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="Context">
+    <clauses name="_msgSender" visibilityAccess="internal" virtual="virtual">
+      <outputParams type="address "/>
+      <expressions>return msg.sender;</expressions>
+    </clauses>
+    <clauses name="_msgData" visibilityAccess="internal" virtual="virtual">
+      <outputParams type="bytes" storageData="calldata"/>
+      <expressions>return msg.data;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
