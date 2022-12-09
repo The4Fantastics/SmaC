@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="StringConversion">
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes32" name="EMPTY" inicialization="0x0"/>
+    <clauses name="byteAt" predefinedModifier="pure" virtual="virtual">
+      <inputParams type="bytes32" valueInput="_data"/>
+      <inputParams type="uint256" valueInput="_at"/>
+      <outputParams type="bytes1"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_at" operator="&lt;" expr2="32"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="result" inicialization="uint256(_data)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="operation" inicialization="8 * _at"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes32" name="byteresult" inicialization="bytes32(result)"/>
+      <expressions>result = result * 2 ** operation;</expressions>
+      <expressions>return bytes1(byteresult);</expressions>
+    </clauses>
+    <clauses name="resizeBytes" predefinedModifier="pure" virtual="virtual">
+      <inputParams type="bytes" valueInput="_bytes"/>
+      <inputParams type="uint256" valueInput="_length"/>
+      <outputParams type="bytes"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="result" inicialization="new bytes(_length)"/>
+      <determinedloops typeCounter="uint256" nameCounter="c" condition="c &lt; _length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <expressions>result[c] = _bytes[c];</expressions>
+      </determinedloops>
+      <expressions>return result;</expressions>
+    </clauses>
+    <clauses name="trimEmptyChars" predefinedModifier="pure" virtual="virtual">
+      <inputParams type="bytes32" valueInput="_bytes"/>
+      <outputParams type="bytes"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="result" inicialization="new bytes(32)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="charCount" inicialization="0"/>
+      <determinedloops typeCounter="uint256" nameCounter="byteCount" condition="byteCount &lt; 32">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <conditions condition="_char == 0">
+          <expressions>break;</expressions>
+        </conditions>
+        <expressions>bytes1 _char = byteAt(_bytes, byteCount);</expressions>
+        <expressions>result[charCount] = _char;</expressions>
+        <expressions>charCount++;</expressions>
+      </determinedloops>
+      <expressions>return resizeBytes(result, charCount);</expressions>
+    </clauses>
+    <clauses name="bytes32ToString" predefinedModifier="pure" virtual="virtual">
+      <inputParams type="bytes32" valueInput="_data"/>
+      <outputParams type="string"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes32" name="result" inicialization="trimEmptyChars(_data)"/>
+      <expressions>return string(result);</expressions>
+    </clauses>
+    <clauses name="stringToBytes32" predefinedModifier="pure" virtual="virtual">
+      <inputParams type="string" valueInput="_data"/>
+      <outputParams type="bytes32" value="result"/>
+      <conditions condition="data.length == 0">
+        <expressions>return EMPTY;</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="data" inicialization="bytes(_data)"/>
+      <expressions>assembly { result := mload(add(_data, 32)) }</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

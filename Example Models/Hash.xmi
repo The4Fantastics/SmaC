@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.4"/>
+  <contracts name="Hash">
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes32" name="_msg" inicialization="keccak256(abi.encodePacked(&quot;0xAA&quot;))"/>
+    <clauses name="hash" predefinedModifier="pure">
+      <inputParams type="uint" valueInput="_num"/>
+      <inputParams type="string" valueInput="_string"/>
+      <inputParams type="address " valueInput="_addr"/>
+      <outputParams type="bytes32"/>
+      <expressions>return keccak256(abi.encodePacked(_num, _string, _addr));</expressions>
+    </clauses>
+    <clauses name="weak">
+      <inputParams type="string" valueInput="string1"/>
+      <outputParams type="bool"/>
+      <expressions>return keccak256(abi.encodePacked(string1)) == _msg;</expressions>
+    </clauses>
+    <clauses name="strong" predefinedModifier="pure">
+      <inputParams type="string" valueInput="string1"/>
+      <inputParams type="string" valueInput="string2"/>
+      <outputParams type="bool"/>
+      <expressions>return keccak256(abi.encodePacked(string1)) == keccak256(abi.encodePacked(string2));</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
