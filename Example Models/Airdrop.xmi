@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.4"/>
+  <contracts name="Airdrop">
+    <clauses name="multiTransferToken" visibilityAccess="external">
+      <inputParams type="address " valueInput="_token"/>
+      <inputParams type="address " array="[]" storageData="calldata" valueInput="_addresses"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_amounts"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_addresses.length" operator="==" expr2="_amounts.length" message="&quot;Lengths of Addresses and Amounts NOT EQUAL&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="token.allowance(msg.sender, address(this))" expr2="_amountSum" message="&quot;Need Approve ERC20 token&quot;"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="_amountSum" inicialization="getSum(_amounts)"/>
+      <determinedloops typeCounter="uint256" nameCounter="i" condition="i &lt; _addresses.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <expressions>token.transferFrom(msg.sender, _addresses[i], _amounts[i]);</expressions>
+      </determinedloops>
+      <expressions>IERC20 token = IERC20(_token);</expressions>
+    </clauses>
+    <clauses name="multiTransferETH" predefinedModifier="payable">
+      <inputParams type="address payable" array="[]" storageData="calldata" valueInput="_addresses"/>
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_amounts"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_addresses.length" operator="==" expr2="_amounts.length" message="&quot;Lengths of Addresses and Amounts NOT EQUAL&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.value" operator="==" expr2="_amountSum" message="&quot;Transfer amount error&quot;"/>
+      <determinedloops typeCounter="uint256" nameCounter="i" condition="i &lt; _addresses.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <expressions>_addresses[i].transfer</expressions>
+        <expressions>(_amounts[i]);</expressions>
+      </determinedloops>
+    </clauses>
+    <clauses name="getSum" predefinedModifier="pure">
+      <inputParams type="uint256" array="[]" storageData="calldata" valueInput="_arr"/>
+      <outputParams type="uint" value="sum"/>
+      <determinedloops typeCounter="uint" nameCounter="i" condition="i &lt; _arr.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <expressions>sum = sum + _arr[i];</expressions>
+      </determinedloops>
+    </clauses>
+  </contracts>
+  <contracts name="ERC20">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" name="totalSupply"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" name="name"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" name="symbol"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint8" name="decimals" inicialization="18"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="account" inicialization="address(0)"/>
+    <localMappingProperties nameMapping="balanceOf">
+      <type type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <localMappingProperties nameMapping="allowance">
+      <type type="mapping" key="address ">
+        <valueIdentifier type="mapping" key="address " value="uint256"/>
+      </type>
+    </localMappingProperties>
+    <constructors type="public">
+      <inputParams type="string" valueInput="name_"/>
+      <inputParams type="string" valueInput="symbol_"/>
+      <attributesInitialization>name = name_;</attributesInitialization>
+      <attributesInitialization>symbol = symbol_;</attributesInitialization>
+    </constructors>
+    <events name="Approval">
+      <inputParams type="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams type="address " indexed="indexed" valueInput="_spender"/>
+      <inputParams type="uint256" valueInput="_value"/>
+    </events>
+    <events name="Transfer">
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_value"/>
+    </events>
+    <clauses name="transfer" visibilityAccess="external" event="//@contracts.1/@events.1">
+      <inputParams type="address " valueInput="recipient"/>
+      <inputParams type="uint" valueInput="amount"/>
+      <outputParams type="bool"/>
+      <expressions>balanceOf[msg.sender] -= amount;</expressions>
+      <expressions>balanceOf[recipient] += amount;</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="recipient"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="approve" visibilityAccess="external" event="//@contracts.1/@events.0">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint" valueInput="amount"/>
+      <outputParams type="bool"/>
+      <expressions>allowance[msg.sender][spender] = amount;</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="spender"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="transferFrom" visibilityAccess="external" event="//@contracts.1/@events.1">
+      <inputParams type="address " valueInput="sender"/>
+      <inputParams type="address " valueInput="recipient"/>
+      <inputParams type="uint" valueInput="amount"/>
+      <outputParams type="bool"/>
+      <expressions>allowance[sender][msg.sender] -= amount;</expressions>
+      <expressions>balanceOf[sender] -= amount;</expressions>
+      <expressions>balanceOf[recipient] += amount;</expressions>
+      <expressions>return true;</expressions>
+      <inputParamsEvent valueInput="sender"/>
+      <inputParamsEvent valueInput="recipient"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="mint" visibilityAccess="external" event="//@contracts.1/@events.1">
+      <inputParams type="uint" valueInput="amount"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="A" inicialization="address(0)"/>
+      <expressions>balanceOf[msg.sender] += amount;</expressions>
+      <expressions>totalSupply += amount;</expressions>
+      <inputParamsEvent valueInput="account"/>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="burn" visibilityAccess="external" event="//@contracts.1/@events.1">
+      <inputParams type="uint" valueInput="amount"/>
+      <expressions>balanceOf[msg.sender] -= amount;</expressions>
+      <expressions>totalSupply -= amount;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="account"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+  </contracts>
+</smaC:File>
