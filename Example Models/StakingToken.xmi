@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.5.0"/>
+  <library name="SafeMath">
+    <functions name="tryAdd" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="bool"/>
+      <outputParams type="uint256"/>
+      <conditions condition="c &lt; a">
+        <expressions>return (false, 0);</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="c" inicialization="a + b"/>
+      <expressions>return (true, c);</expressions>
+    </functions>
+    <functions name="trySub" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="bool"/>
+      <outputParams type="uint256"/>
+      <conditions condition="b > a">
+        <expressions>return (false, 0);</expressions>
+      </conditions>
+      <expressions>return (true, a - b);</expressions>
+    </functions>
+    <functions name="tryMul" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="bool"/>
+      <outputParams type="uint256"/>
+      <conditions condition="a == 0">
+        <expressions>return (true, 0);</expressions>
+      </conditions>
+      <conditions condition="result != b">
+        <expressions>return (false, 0);</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="c" inicialization="a * b"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="result" inicialization="c / a"/>
+      <expressions>return (true, c);</expressions>
+    </functions>
+    <functions name="tryDiv" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="bool"/>
+      <outputParams type="uint256"/>
+      <conditions condition="b == 0">
+        <expressions>return (false, 0);</expressions>
+      </conditions>
+      <expressions>return (true, a / b);</expressions>
+    </functions>
+    <functions name="tryMod" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="bool"/>
+      <outputParams type="uint256"/>
+      <conditions condition="b == 0">
+        <expressions>return (false, 0);</expressions>
+      </conditions>
+      <expressions>return (true, a % b);</expressions>
+    </functions>
+    <functions name="add" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <expressions>return a + b;</expressions>
+    </functions>
+    <functions name="sub" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <expressions>return a - b;</expressions>
+    </functions>
+    <functions name="mul" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <expressions>return a * b;</expressions>
+    </functions>
+    <functions name="div" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <expressions>return a / b;</expressions>
+    </functions>
+    <functions name="mod" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <outputParams type="uint256"/>
+      <expressions>return a % b;</expressions>
+    </functions>
+    <functions name="sub" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="uint256"/>
+      <restriction xsi:type="smaC:Restriction" expr1="b" operator="&lt;=" expr2="a" message="&quot;Error operation&quot;"/>
+      <expressions>return a - b;</expressions>
+    </functions>
+    <functions name="div" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="uint256"/>
+      <restriction xsi:type="smaC:Restriction" expr1="b" expr2="0" message="&quot;Error operation&quot;"/>
+      <expressions>return a / b;</expressions>
+    </functions>
+    <functions name="mod" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint256" valueInput="a"/>
+      <inputParams type="uint256" valueInput="b"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="uint256"/>
+      <restriction xsi:type="smaC:Restriction" expr1="b" expr2="0" message="&quot;Error operation&quot;"/>
+      <expressions>return a % b;</expressions>
+    </functions>
+  </library>
+  <interfaces name="IERC20">
+    <interfaceEvents name="Transfer">
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="to"/>
+      <inputParams type="uint256" valueInput="value"/>
+    </interfaceEvents>
+    <interfaceEvents name="Approval">
+      <inputParams type="address " indexed="indexed" valueInput="owner"/>
+      <inputParams type="address " indexed="indexed" valueInput="spender"/>
+      <inputParams type="uint256" valueInput="value"/>
+    </interfaceEvents>
+    <interfaceFunction name="totalSupply" modifier="view">
+      <outputParams type="uint256"/>
+    </interfaceFunction>
+    <interfaceFunction name="balanceOf" modifier="view">
+      <inputParams type="address " valueInput="account"/>
+      <outputParams type="uint256"/>
+    </interfaceFunction>
+    <interfaceFunction name="transfer">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <outputParams type="bool"/>
+    </interfaceFunction>
+    <interfaceFunction name="allowance" modifier="view">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="spender"/>
+      <outputParams type="uint256"/>
+    </interfaceFunction>
+    <interfaceFunction name="approve">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <outputParams type="bool"/>
+    </interfaceFunction>
+    <interfaceFunction name="transferFrom">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <outputParams type="bool"/>
+    </interfaceFunction>
+  </interfaces>
+  <interfaces name="IERC20Metadata">
+    <interfaceFunction name="name" modifier="view">
+      <outputParams type="string"/>
+    </interfaceFunction>
+    <interfaceFunction name="symbol" modifier="view">
+      <outputParams type="string"/>
+    </interfaceFunction>
+    <interfaceFunction name="decimals" modifier="view">
+      <outputParams type="uint8"/>
+    </interfaceFunction>
+  </interfaces>
+  <contracts name="Context">
+    <clauses name="_msgSender" visibilityAccess="internal">
+      <outputParams type="address "/>
+      <expressions>return msg.sender;</expressions>
+    </clauses>
+    <clauses name="_msgData" visibilityAccess="internal">
+      <outputParams type="bytes"/>
+      <expressions>return msg.data;</expressions>
+    </clauses>
+  </contracts>
+  <contracts name="Ownable" superType="//@contracts.0">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " visibility="private" name="_owner"/>
+    <constructors type="public">
+      <attributesInitialization>_transferOwnership(_msgSender());</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOwner">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </modifiers>
+    <events name="OwnershipTransferred">
+      <inputParams type="address " indexed="indexed" valueInput="previousOwner"/>
+      <inputParams type="address " indexed="indexed" valueInput="newOwner"/>
+    </events>
+    <clauses name="owner">
+      <outputParams type="address "/>
+      <expressions>return _owner;</expressions>
+    </clauses>
+    <clauses name="_checkOwner" visibilityAccess="internal">
+      <restriction xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </clauses>
+    <clauses name="renounceOwnership" personalizedModifier="//@contracts.1/@modifiers.0">
+      <expressions>_transferOwnership(address(0));</expressions>
+    </clauses>
+    <clauses name="transferOwnership" personalizedModifier="//@contracts.1/@modifiers.0">
+      <inputParams type="address " valueInput="newOwner"/>
+      <restriction xsi:type="smaC:Restriction" expr1="newOwner" operator="!=" expr2="address(0)" message="&quot;Ownable: new owner is the zero address&quot;"/>
+      <expressions>_transferOwnership(newOwner);</expressions>
+    </clauses>
+    <clauses name="_transferOwnership" visibilityAccess="internal" event="//@contracts.1/@events.0">
+      <inputParams type="address " valueInput="newOwner"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="oldOwner" inicialization="_owner"/>
+      <expressions>_owner = newOwner;</expressions>
+      <inputParamsEvent valueInput="oldOwner"/>
+      <inputParamsEvent valueInput="newOwner"/>
+    </clauses>
+  </contracts>
+  <contracts name="ERC20" superType="//@interfaces.0 //@interfaces.1 //@contracts.0">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="private" name="_totalSupply"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="private" name="_name"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="private" name="_symbol"/>
+    <localMappingProperties visibility="private" nameMapping="_balances">
+      <type type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="_allowances">
+      <type type="mapping" key="address ">
+        <valueIdentifier type="mapping" key="address " value="uint256"/>
+      </type>
+    </localMappingProperties>
+    <constructors type="internal">
+      <inputParams type="string" valueInput="name_"/>
+      <inputParams type="string" valueInput="symbol_"/>
+      <attributesInitialization>_name = name_;</attributesInitialization>
+      <attributesInitialization>_symbol = symbol_;</attributesInitialization>
+    </constructors>
+    <clauses name="name">
+      <outputParams type="string"/>
+      <expressions>return _name;</expressions>
+    </clauses>
+    <clauses name="symbol">
+      <outputParams type="string"/>
+      <expressions>return _symbol;</expressions>
+    </clauses>
+    <clauses name="decimals">
+      <outputParams type="uint8"/>
+      <expressions>return 18;</expressions>
+    </clauses>
+    <clauses name="totalSupply">
+      <outputParams type="uint256"/>
+      <expressions>return _totalSupply;</expressions>
+    </clauses>
+    <clauses name="balanceOf">
+      <inputParams type="address " valueInput="account"/>
+      <outputParams type="uint256"/>
+      <expressions>return _balances[account];</expressions>
+    </clauses>
+    <clauses name="transfer">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_msgSender()"/>
+      <expressions>_transfer(owner, to, amount);</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="allowance">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="spender"/>
+      <outputParams type="uint256"/>
+      <expressions>return _allowances[owner][spender];</expressions>
+    </clauses>
+    <clauses name="approve">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_msgSender()"/>
+      <expressions>_approve(owner, spender, amount);</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="transfer_from">
+      <inputParams type="address " valueInput="__from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="spender" inicialization="_msgSender()"/>
+      <expressions>_spendAllowance(__from, spender, amount);</expressions>
+      <expressions>_transfer(__from, to, amount);</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="increaseAllowance">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="addedValue"/>
+      <outputParams type="bool"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_msgSender()"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="allowance_result" inicialization="allowance(owner, spender)"/>
+      <expressions>_approve(owner, spender, allowance_result + addedValue);</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="decreaseAllowance">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="subtractedValue"/>
+      <outputParams type="bool"/>
+      <restriction xsi:type="smaC:Restriction" expr1="currentAllowance" operator=">=" expr2="subtractedValue" message="&quot;ERC20: decreased allowance below zero&quot;"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_msgSender()"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="currentAllowance" inicialization="allowance(owner, spender)"/>
+      <expressions>_approve(owner, spender, currentAllowance - subtractedValue);</expressions>
+      <expressions>return true;</expressions>
+    </clauses>
+    <clauses name="_transfer" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_from" operator="!=" expr2="address(0)" message="&quot;ERC20: transfer _from the zero address&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="to" operator="!=" expr2="address(0)" message="&quot;ERC20: transfer to the zero address&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_fromBalance" operator=">=" expr2="amount" message="&quot;ERC20: transfer amount exceeds balance&quot;"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="_fromBalance" inicialization="_balances[_from]"/>
+      <expressions>_beforeTokenTransfer(_from, to, amount);</expressions>
+      <expressions>_balances[_from] = _fromBalance - amount;</expressions>
+      <expressions>_balances[to] += amount;</expressions>
+      <expressions>_afterTokenTransfer(_from, to, amount);</expressions>
+      <event href="/SMAC_MODELS/SmartContracts/StakingToken.sce#|7"/>
+      <inputParamsEvent valueInput="_from"/>
+      <inputParamsEvent valueInput="to"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="_mint" visibilityAccess="internal">
+      <inputParams type="address " valueInput="account"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="account" operator="!=" expr2="address(0)" message="&quot;ERC20: mint to the zero address&quot;"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="zero" inicialization="address(0)"/>
+      <expressions>_beforeTokenTransfer(address(0), account, amount);</expressions>
+      <expressions>_totalSupply += amount;</expressions>
+      <expressions>_balances[account] += amount;</expressions>
+      <expressions>_afterTokenTransfer(address(0), account, amount);</expressions>
+      <event href="/SMAC_MODELS/SmartContracts/StakingToken.sce#|8"/>
+      <inputParamsEvent valueInput="zero"/>
+      <inputParamsEvent valueInput="account"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="_burn" visibilityAccess="internal">
+      <inputParams type="address " valueInput="account"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="account" operator="!=" expr2="address(0)" message="&quot;ERC20: burn _from the zero address&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="accountBalance" operator=">=" expr2="amount" message="&quot;ERC20: burn amount exceeds balance&quot;"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="accountBalance" inicialization="_balances[account]"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="zero" inicialization="address(0)"/>
+      <expressions>_beforeTokenTransfer(account, address(0), amount);</expressions>
+      <expressions>_balances[account] = accountBalance - amount;</expressions>
+      <expressions>_totalSupply -= amount;</expressions>
+      <expressions>_afterTokenTransfer(account, address(0), amount);</expressions>
+      <event href="/SMAC_MODELS/SmartContracts/StakingToken.sce#|9"/>
+      <inputParamsEvent valueInput="account"/>
+      <inputParamsEvent valueInput="zero"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="_approve" visibilityAccess="internal">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="owner" operator="!=" expr2="address(0)" message="&quot;ERC20: approve _from the zero address&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="spender" operator="!=" expr2="address(0)" message="&quot;ERC20: approve to the zero address&quot;"/>
+      <expressions>_allowances[owner][spender] = amount;</expressions>
+      <event href="/SMAC_MODELS/SmartContracts/StakingToken.sce#|10"/>
+      <inputParamsEvent valueInput="owner"/>
+      <inputParamsEvent valueInput="spender"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="_spendAllowance" visibilityAccess="internal">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <conditions condition="currentAllowance != MAX_INT">
+        <restriction xsi:type="smaC:Restriction" expr1="currentAllowance" operator=">=" expr2="amount" message="&quot;ERC20: insufficient allowance&quot;"/>
+        <expressions>_approve(owner, spender, currentAllowance - amount);</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="currentAllowance" inicialization="allowance(owner, spender)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="MAX_INT" inicialization="2**256 - 1"/>
+    </clauses>
+    <clauses name="_beforeTokenTransfer" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+    </clauses>
+    <clauses name="_afterTokenTransfer" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="amount"/>
+    </clauses>
+  </contracts>
+  <contracts name="StakingToken" superType="//@contracts.2 //@contracts.1" libraries="//@library.0">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " array="[]" visibility="internal" name="stakeholders"/>
+    <localMappingProperties visibility="internal" nameMapping="stakes">
+      <type type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="internal" nameMapping="rewards">
+      <type type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <constructors type="public">
+      <inputParams type="address " valueInput="_owner"/>
+      <inputParams type="uint256" valueInput="_supply"/>
+      <attributesInitialization>_mint(_owner, _supply);</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOwner">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </modifiers>
+    <clauses name="createStake">
+      <inputParams type="uint256" valueInput="_stake"/>
+      <conditions condition="stakes[msg.sender] == 0">
+        <expressions>addStakeholder(msg.sender);</expressions>
+      </conditions>
+      <expressions>_burn(msg.sender, _stake);</expressions>
+      <expressions>stakes[msg.sender] = stakes[msg.sender].add</expressions>
+      <expressions>(_stake);</expressions>
+    </clauses>
+    <clauses name="removeStake">
+      <inputParams type="uint256" valueInput="_stake"/>
+      <conditions condition="stakes[msg.sender] == 0">
+        <expressions>removeStakeholder(msg.sender);</expressions>
+      </conditions>
+      <expressions>stakes[msg.sender] = stakes[msg.sender].sub</expressions>
+      <expressions>(_stake);</expressions>
+      <expressions>_mint(msg.sender, _stake);</expressions>
+    </clauses>
+    <clauses name="stakeOf">
+      <inputParams type="address " valueInput="_stakeholder"/>
+      <outputParams type="uint256"/>
+      <expressions>return stakes[_stakeholder];</expressions>
+    </clauses>
+    <clauses name="totalStakes">
+      <outputParams type="uint256"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="_totalStakes" inicialization="0"/>
+      <determinedloops typeCounter="uint256" nameCounter="s" condition="s &lt; stakeholders.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <expressions>_totalStakes = _totalStakes.add</expressions>
+        <expressions>(stakes[stakeholders[s]]);</expressions>
+      </determinedloops>
+      <expressions>return _totalStakes;</expressions>
+    </clauses>
+    <clauses name="isStakeholder">
+      <inputParams type="address " valueInput="_address"/>
+      <outputParams type="bool"/>
+      <outputParams type="uint256"/>
+      <determinedloops typeCounter="uint256" nameCounter="s" condition="s &lt; stakeholders.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <properties xsi:type="smaC:PropertyAddress" type="address " name="stakeholder" inicialization="stakeholders[s]"/>
+        <conditions condition="_address == stakeholder">
+          <expressions>return (true, s);</expressions>
+        </conditions>
+      </determinedloops>
+      <expressions>return (false, 0);</expressions>
+    </clauses>
+    <clauses name="addStakeholder">
+      <inputParams type="address " valueInput="_stakeholder"/>
+      <conditions condition="!_isStakeholder">
+        <expressions>stakeholders.push(_stakeholder);</expressions>
+      </conditions>
+      <expressions>(bool _isStakeholder, ) = isStakeholder(_stakeholder);</expressions>
+    </clauses>
+    <clauses name="removeStakeholder">
+      <inputParams type="address " valueInput="_stakeholder"/>
+      <conditions condition="_isStakeholder">
+        <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="counter" inicialization="stakeholders.length - 1"/>
+        <properties xsi:type="smaC:PropertyAddress" type="address " name="stakeholder" inicialization="stakeholders[counter]"/>
+        <expressions>stakeholders[s] = stakeholder;</expressions>
+        <expressions>stakeholders.pop();</expressions>
+      </conditions>
+      <expressions>(bool _isStakeholder, uint256 s) = isStakeholder(_stakeholder);</expressions>
+    </clauses>
+    <clauses name="rewardOf">
+      <inputParams type="address " valueInput="_stakeholder"/>
+      <outputParams type="uint256"/>
+      <expressions>return rewards[_stakeholder];</expressions>
+    </clauses>
+    <clauses name="totalRewards">
+      <outputParams type="uint256"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="_totalRewards" inicialization="0"/>
+      <determinedloops typeCounter="uint256" nameCounter="s" condition="s &lt; stakeholders.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <expressions>_totalRewards = _totalRewards.add</expressions>
+        <expressions>(rewards[stakeholders[s]]);</expressions>
+      </determinedloops>
+      <expressions>return _totalRewards;</expressions>
+    </clauses>
+    <clauses name="calculateReward">
+      <inputParams type="address " valueInput="_stakeholder"/>
+      <outputParams type="uint256"/>
+      <expressions>return stakes[_stakeholder] / 100;</expressions>
+    </clauses>
+    <clauses name="distributeRewards" personalizedModifier="//@contracts.3/@modifiers.0">
+      <determinedloops typeCounter="uint256" nameCounter="s" condition="s &lt; stakeholders.length">
+        <gasrestriction expr1="msg.sender.balance" operator=">=" amount="2300" typeCoin="wei"/>
+        <properties xsi:type="smaC:PropertyAddress" type="address " name="stakeholder" inicialization="stakeholders[s]"/>
+        <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="reward" inicialization="calculateReward(stakeholder)"/>
+        <expressions>rewards[stakeholder] = rewards[stakeholder].add</expressions>
+        <expressions>(reward);</expressions>
+      </determinedloops>
+    </clauses>
+    <clauses name="withdrawReward">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="reward" inicialization="rewards[msg.sender]"/>
+      <expressions>rewards[msg.sender] = 0;</expressions>
+      <expressions>_mint(msg.sender, reward);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
