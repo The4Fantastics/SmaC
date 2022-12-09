@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="Create2">
+    <clauses name="deploy" visibilityAccess="internal">
+      <inputParams type="uint256" valueInput="amount"/>
+      <inputParams type="bytes32" valueInput="salt"/>
+      <inputParams type="bytes" valueInput="bytecode"/>
+      <outputParams type="address " value="addr"/>
+      <restriction xsi:type="smaC:Restriction" expr1="address(this).balance" operator=">=" expr2="amount" message="&quot;Create2: insufficient balance&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="bytecode.length" operator="!=" expr2="0" message="&quot;Create2: bytecode length is zero&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="addr" operator="!=" expr2="address(0)" message="&quot;Create2: Failed on deploy&quot;"/>
+      <expressions>assembly { addr := create2(amount, add(bytecode, 0x20), mload(bytecode), salt) }</expressions>
+    </clauses>
+    <clauses name="computeAddress" visibilityAccess="internal">
+      <inputParams type="bytes32" valueInput="salt"/>
+      <inputParams type="bytes32" valueInput="bytecodeHash"/>
+      <outputParams type="address "/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="this_ad" inicialization="address(this)"/>
+      <expressions>return computeAddress(salt, bytecodeHash, this_ad);</expressions>
+    </clauses>
+    <clauses name="computeAddress" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="bytes32" valueInput="salt"/>
+      <inputParams type="bytes32" valueInput="bytecodeHash"/>
+      <inputParams type="address " valueInput="deployer"/>
+      <outputParams type="address " value="addr"/>
+      <expressions>assembly { let ptr := mload(0x40) mstore(add(ptr, 0x40), bytecodeHash) mstore(add(ptr, 0x20), salt) mstore(ptr, deployer) let start := add(ptr, 0x0b) mstore8(start, 0xff) addr := keccak256(start, 85) }</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
