@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.6.0"/>
+  <imports name="&quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;"/>
+  <imports name="&quot;@openzeppelin/contracts/access/AccessControl.sol&quot;"/>
+  <contracts name="Administered">
+    <superType href="/SMAC_MODELS/SmartContracts/EnergyMarket.sce#|0"/>
+    <localProperties xsi:type="smaC:PropertyBytes" type="bytes32" constant="constant" name="USER_ROLE" inicialization="keccak256(&quot;USER&quot;)"/>
+    <constructors type="public">
+      <attributesInitialization>_setupRole(DEFAULT_ADMIN_ROLE, msg.sender);</attributesInitialization>
+      <attributesInitialization>_setRoleAdmin(USER_ROLE, DEFAULT_ADMIN_ROLE);</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyAdmin">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="isAdmin(msg.sender)" message="&quot;Restricted to admins.&quot;"/>
+    </modifiers>
+    <modifiers name="onlyUser">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="isUser(msg.sender)" message="&quot;Restricted to users.&quot;"/>
+    </modifiers>
+    <clauses name="isAdmin" virtual="virtual">
+      <inputParams type="address " valueInput="account"/>
+      <outputParams type="bool"/>
+      <expressions>return hasRole(DEFAULT_ADMIN_ROLE, account);</expressions>
+    </clauses>
+    <clauses name="isUser" virtual="virtual">
+      <inputParams type="address " valueInput="account"/>
+      <outputParams type="bool"/>
+      <expressions>return hasRole(USER_ROLE, account);</expressions>
+    </clauses>
+    <clauses name="addUser" personalizedModifier="//@contracts.0/@modifiers.0" virtual="virtual">
+      <inputParams type="address " valueInput="account"/>
+      <expressions>grantRole(USER_ROLE, account);</expressions>
+    </clauses>
+    <clauses name="addAdmin" personalizedModifier="//@contracts.0/@modifiers.0" virtual="virtual">
+      <inputParams type="address " valueInput="account"/>
+      <expressions>grantRole(DEFAULT_ADMIN_ROLE, account);</expressions>
+    </clauses>
+    <clauses name="removeUser" personalizedModifier="//@contracts.0/@modifiers.0" virtual="virtual">
+      <inputParams type="address " valueInput="account"/>
+      <expressions>revokeRole(USER_ROLE, account);</expressions>
+    </clauses>
+    <clauses name="renounceAdmin" virtual="virtual">
+      <expressions>renounceRole(DEFAULT_ADMIN_ROLE, msg.sender);</expressions>
+    </clauses>
+  </contracts>
+  <contracts name="EnergyMarket">
+    <superType href="/SMAC_MODELS/SmartContracts/EnergyMarket.sce#|4"/>
+    <superType href="/SMAC_MODELS/SmartContracts/EMF-src-generated/EnergyMarket.xmi#//@contracts.0"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint128" name="basePrice"/>
+    <localMappingProperties nameMapping="consumption">
+      <type type="mapping" key="uint256" value="uint128"/>
+    </localMappingProperties>
+    <localMappingProperties nameMapping="production">
+      <type type="mapping" key="uint256" value="uint128"/>
+    </localMappingProperties>
+    <constructors type="public">
+      <inputParams type="uint256" valueInput="_initialSupply"/>
+      <inputParams type="uint128" valueInput="_basePrice"/>
+      <constructorContractInherance href="/SMAC_MODELS/SmartContracts/EnergyMarket.sce#|6"/>
+      <inputParamsConstructorContractInherance valueInput="&quot;Energy&quot;"/>
+      <inputParamsConstructorContractInherance valueInput="&quot;POW&quot;"/>
+      <attributesInitialization>_mint(address(this), _initialSupply);</attributesInitialization>
+      <attributesInitialization>basePrice = _basePrice;</attributesInitialization>
+    </constructors>
+    <events name="EnergyProduced">
+      <inputParams type="address " valueInput="producer"/>
+      <inputParams type="uint256" valueInput="time"/>
+    </events>
+    <events name="EnergyConsumed">
+      <inputParams type="address " valueInput="consumer"/>
+      <inputParams type="uint256" valueInput="time"/>
+    </events>
+    <clauses name="getProductionPrice" virtual="virtual">
+      <inputParams type="uint256" valueInput="_time"/>
+      <outputParams type="uint256"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int256" name="price" inicialization="int256(basePrice)"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int" name="totalTime" inicialization="safeSub(production[_time], consumption[_time])"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int" name="totalPrice" inicialization="price * totalTime"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int" name="maximo" inicialization="max(0,totalPrice)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="productionprice" inicialization="uint256(maximo)"/>
+      <expressions>totalTime = 3 + totalTime;</expressions>
+      <expressions>return productionprice;</expressions>
+    </clauses>
+    <clauses name="getConsumptionPrice" virtual="virtual">
+      <inputParams type="uint256" valueInput="_time"/>
+      <outputParams type="uint256"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int256" name="price" inicialization="int256(basePrice)"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int" name="totalTime" inicialization="safeSub(production[_time], consumption[_time])"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int" name="totalPrice" inicialization="price * totalTime"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int" name="maximo" inicialization="max(0,totalPrice)"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="productionprice" inicialization="uint256(maximo)"/>
+      <expressions>totalTime = 3 + totalTime;</expressions>
+      <expressions>return productionprice;</expressions>
+    </clauses>
+    <clauses name="produce" virtual="virtual" event="//@contracts.1/@events.0">
+      <inputParams type="uint256" valueInput="_time"/>
+      <restriction xsi:type="smaC:Restriction" expr1="isUser(msg.sender)" message="&quot;Unknown meter.&quot;"/>
+      <expressions>this.transfer( msg.sender, getProductionPrice(_time) ) ;</expressions>
+      <expressions>production[_time] = production[_time] + 1;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="_time"/>
+    </clauses>
+    <clauses name="consume" virtual="virtual" event="//@contracts.1/@events.1">
+      <inputParams type="uint256" valueInput="_time"/>
+      <restriction xsi:type="smaC:Restriction" expr1="isUser(msg.sender)" message="&quot;Unknown meter.&quot;"/>
+      <expressions>this.transferFrom( msg.sender, address(this), getConsumptionPrice(_time) ) ;</expressions>
+      <expressions>consumption[_time] = consumption[_time] + 1;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+      <inputParamsEvent valueInput="_time"/>
+    </clauses>
+    <clauses name="max" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="int256" valueInput="a"/>
+      <inputParams type="int256" valueInput="b"/>
+      <outputParams type="int256"/>
+      <conditions condition="a >= b">
+        <expressions>maximo = a;</expressions>
+        <expressionsElse>maximo = b;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyInteger" type="int256" name="maximo"/>
+      <expressions>return maximo;</expressions>
+    </clauses>
+    <clauses name="safeSub" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="uint128" valueInput="a"/>
+      <inputParams type="uint128" valueInput="b"/>
+      <outputParams type="int256"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int256" name="a" inicialization="int256(a)"/>
+      <properties xsi:type="smaC:PropertyInteger" type="int256" name="b" inicialization="int256(b)"/>
+      <expressions>return a - b;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
