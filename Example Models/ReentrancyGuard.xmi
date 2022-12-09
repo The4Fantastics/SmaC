@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="ReentrancyGuard">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="private" constant="constant" name="_NOT_ENTERED" inicialization="1"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="private" constant="constant" name="_ENTERED" inicialization="2"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint256" visibility="private" name="_status"/>
+    <constructors type="public">
+      <attributesInitialization>_status = _NOT_ENTERED;</attributesInitialization>
+    </constructors>
+    <modifiers name="nonReentrant">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="_status" operator="!=" expr2="_ENTERED" message="&quot;ReentrancyGuard: reentrant call&quot;"/>
+      <expressionsAssignValueAfterMark>_status = _NOT_ENTERED</expressionsAssignValueAfterMark>
+    </modifiers>
+    <clauses name="_nonReentrantBefore" visibilityAccess="private">
+      <restriction xsi:type="smaC:Restriction" expr1="_status" operator="!=" expr2="_ENTERED" message="&quot;ReentrancyGuard: reentrant call&quot;"/>
+      <expressions>_status = _ENTERED;</expressions>
+    </clauses>
+    <clauses name="_nonReentrantAfter" visibilityAccess="private">
+      <expressions>_status = _NOT_ENTERED;</expressions>
+    </clauses>
+    <clauses name="_reentrancyGuardEntered" visibilityAccess="internal">
+      <outputParams type="bool"/>
+      <expressions>return _status == _ENTERED;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
