@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <imports name="&quot;../Address.sol&quot;"/>
+  <abstractContracts name="Ownable">
+    <superType href="/SMAC_MODELS/Escrow.sce#|0"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " visibility="private" name="_owner"/>
+    <constructors type="public">
+      <attributesInitialization>_transferOwnership(_msgSender());</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOwner">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </modifiers>
+    <events name="OwnershipTransferred">
+      <inputParams type="address " indexed="indexed" valueInput="previousOwner"/>
+      <inputParams type="address " indexed="indexed" valueInput="newOwner"/>
+    </events>
+    <clauses name="owner" virtual="virtual">
+      <outputParams type="address "/>
+      <expressions>return _owner;</expressions>
+    </clauses>
+    <clauses name="_checkOwner" visibilityAccess="internal" virtual="virtual">
+      <restriction xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </clauses>
+    <clauses name="renounceOwnership" personalizedModifier="//@abstractContracts.0/@modifiers.0" virtual="virtual">
+      <expressions>_transferOwnership(address(0));</expressions>
+    </clauses>
+    <clauses name="transferOwnership" personalizedModifier="//@abstractContracts.0/@modifiers.0" virtual="virtual">
+      <inputParams type="address " valueInput="newOwner"/>
+      <restriction xsi:type="smaC:Restriction" expr1="newOwner" operator="!=" expr2="address(0)" message="&quot;Ownable: new owner is the zero address&quot;"/>
+      <expressions>_transferOwnership(newOwner);</expressions>
+    </clauses>
+    <clauses name="_transferOwnership" visibilityAccess="internal" virtual="virtual" event="//@abstractContracts.0/@events.0">
+      <inputParams type="address " valueInput="newOwner"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="oldOwner" inicialization="_owner"/>
+      <expressions>_owner = newOwner;</expressions>
+      <inputParamsEvent valueInput="oldOwner"/>
+      <inputParamsEvent valueInput="newOwner"/>
+    </clauses>
+  </abstractContracts>
+  <contracts name="Escrow" superType="//@abstractContracts.0">
+    <localMappingProperties visibility="private" nameMapping="_deposits">
+      <type type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <libraries href="/SMAC_MODELS/Escrow.sce#|5"/>
+    <modifiers name="onlyOwner">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </modifiers>
+    <events name="Deposited">
+      <inputParams type="address " indexed="indexed" valueInput="payee"/>
+      <inputParams type="uint256" valueInput="weiAmount"/>
+    </events>
+    <events name="Withdrawn">
+      <inputParams type="address " indexed="indexed" valueInput="payee"/>
+      <inputParams type="uint256" valueInput="weiAmount"/>
+    </events>
+    <clauses name="depositsOf">
+      <inputParams type="address " valueInput="payee"/>
+      <outputParams type="uint256"/>
+      <expressions>return _deposits[payee];</expressions>
+    </clauses>
+    <clauses name="deposit" personalizedModifier="//@contracts.0/@modifiers.0" predefinedModifier="payable" virtual="virtual" event="//@contracts.0/@events.0">
+      <inputParams type="address " valueInput="payee"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="amount" inicialization="msg.value"/>
+      <expressions>_deposits[payee] += amount;</expressions>
+      <inputParamsEvent valueInput="payee"/>
+      <inputParamsEvent valueInput="amount"/>
+    </clauses>
+    <clauses name="withdraw" personalizedModifier="//@contracts.0/@modifiers.0" virtual="virtual" event="//@contracts.0/@events.1">
+      <inputParams type="address payable" valueInput="payee"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="payment" inicialization="_deposits[payee]"/>
+      <expressions>_deposits[payee] = 0;</expressions>
+      <expressions>payee.sendValue(payment);</expressions>
+      <inputParamsEvent valueInput="payee"/>
+      <inputParamsEvent valueInput="payment"/>
+    </clauses>
+  </contracts>
+</smaC:File>
