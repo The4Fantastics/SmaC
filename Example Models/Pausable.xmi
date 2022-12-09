@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="Context">
+    <clauses name="_msgSender" visibilityAccess="internal" virtual="virtual">
+      <outputParams type="address "/>
+      <expressions>return msg.sender;</expressions>
+    </clauses>
+    <clauses name="_msgData" visibilityAccess="internal" virtual="virtual">
+      <outputParams type="bytes" storageData="calldata"/>
+      <expressions>return msg.data;</expressions>
+    </clauses>
+  </contracts>
+  <contracts name="Pausable" superType="//@contracts.0">
+    <localProperties xsi:type="smaC:PropertyBoolean" type="bool" visibility="private" name="_paused"/>
+    <constructors type="public">
+      <attributesInitialization>_paused = false;</attributesInitialization>
+    </constructors>
+    <modifiers name="whenNotPaused">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="paused()" message="&quot;Pausable: not paused&quot;"/>
+    </modifiers>
+    <modifiers name="whenPaused">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="paused()" message="&quot;Pausable: not paused&quot;"/>
+    </modifiers>
+    <events name="Paused">
+      <inputParams type="address " valueInput="account"/>
+    </events>
+    <events name="Unpaused">
+      <inputParams type="address " valueInput="account"/>
+    </events>
+    <clauses name="paused" virtual="virtual">
+      <outputParams type="bool"/>
+      <expressions>return _paused;</expressions>
+    </clauses>
+    <clauses name="_requireNotPaused" visibilityAccess="internal" virtual="virtual">
+      <restriction xsi:type="smaC:Restriction" expr1="paused()" message="&quot;Pausable: paused&quot;"/>
+    </clauses>
+    <clauses name="_requirePaused" visibilityAccess="internal" virtual="virtual">
+      <restriction xsi:type="smaC:Restriction" expr1="paused()" message="&quot;Pausable: not paused&quot;"/>
+    </clauses>
+    <clauses name="_pause" visibilityAccess="internal" personalizedModifier="//@contracts.1/@modifiers.0" virtual="virtual" event="//@contracts.1/@events.0">
+      <expressions>_paused = true;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+    </clauses>
+    <clauses name="_unpause" visibilityAccess="internal" personalizedModifier="//@contracts.1/@modifiers.1" virtual="virtual" event="//@contracts.1/@events.1">
+      <expressions>_paused = false;</expressions>
+      <inputParamsEvent valueInput="msg.sender"/>
+    </clauses>
+  </contracts>
+</smaC:File>
