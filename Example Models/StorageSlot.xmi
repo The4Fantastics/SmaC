@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.0"/>
+  <contracts name="StorageSlot">
+    <structs name="AddressSlot">
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="value"/>
+    </structs>
+    <structs name="BooleanSlot">
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="value"/>
+    </structs>
+    <structs name="Bytes32Slot">
+      <properties xsi:type="smaC:PropertyBytes" type="bytes32" name="value"/>
+    </structs>
+    <structs name="Uint256Slot">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint256" name="value"/>
+    </structs>
+    <clauses name="getAddressSlot" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="bytes32" valueInput="slot"/>
+      <outputParams type="AddressSlot" storageData="storage" value="r"/>
+      <expressions>assembly { r.slot := slot }</expressions>
+    </clauses>
+    <clauses name="getBooleanSlot" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="bytes32" valueInput="slot"/>
+      <outputParams type="BooleanSlot" storageData="storage" value="r"/>
+      <expressions>assembly { r.slot := slot }</expressions>
+    </clauses>
+    <clauses name="getBytes32Slot" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="bytes32" valueInput="slot"/>
+      <outputParams type="Bytes32Slot" storageData="storage" value="r"/>
+      <expressions>assembly { r.slot := slot }</expressions>
+    </clauses>
+    <clauses name="getUint256Slot" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="bytes32" valueInput="slot"/>
+      <outputParams type="Uint256Slot" storageData="storage" value="r"/>
+      <expressions>assembly { r.slot := slot }</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
