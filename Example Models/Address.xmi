@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.1"/>
+  <contracts name="Address">
+    <clauses name="isContract" visibilityAccess="internal">
+      <inputParams type="address " valueInput="account"/>
+      <outputParams type="bool"/>
+      <expressions>return account.code.length > 0;</expressions>
+    </clauses>
+    <clauses name="sendValue" visibilityAccess="internal">
+      <inputParams type="address payable" valueInput="recipient"/>
+      <inputParams type="uint256" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="address(this).balance" operator=">=" expr2="amount" message="&quot;Address: insufficient balance&quot;"/>
+      <expressions>recipient.transfer(amount);</expressions>
+    </clauses>
+    <clauses name="functionCall" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <outputParams type="bytes"/>
+      <expressions>return functionCallWithValue</expressions>
+      <expressions>(target, data, 0, &quot;Address: low-level call failed&quot;);</expressions>
+    </clauses>
+    <clauses name="functionCall" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="bytes"/>
+      <expressions>return functionCallWithValue</expressions>
+      <expressions>(target, data, 0, errorMessage);</expressions>
+    </clauses>
+    <clauses name="functionCallWithValue" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <outputParams type="bytes"/>
+      <expressions>return functionCallWithValue</expressions>
+      <expressions>(target, data, value, &quot;Address: low-level call with value failed&quot;);</expressions>
+    </clauses>
+    <clauses name="functionCallWithValue" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="uint256" valueInput="value"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="bytes"/>
+      <restriction xsi:type="smaC:Restriction" expr1="address(this).balance" operator=">=" expr2="value" message="&quot;Address: insufficient balance for call&quot;"/>
+      <expressions>return verifyCallResultFromTarget(target, success, returndata, errorMessage);</expressions>
+    </clauses>
+    <clauses name="functionStaticCall" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <outputParams type="bytes"/>
+      <expressions>return functionStaticCall</expressions>
+      <expressions>(target, data, &quot;Address: low-level static call failed&quot;);</expressions>
+    </clauses>
+    <clauses name="functionStaticCall" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="bytes"/>
+      <expressions>(bool success, bytes memory returndata) = target.staticcall</expressions>
+      <expressions>(data);</expressions>
+      <expressions>return verifyCallResultFromTarget(target, success, returndata, errorMessage);</expressions>
+    </clauses>
+    <clauses name="functionDelegateCall" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <outputParams type="bytes"/>
+      <expressions>return functionDelegateCall</expressions>
+      <expressions>(target, data, &quot;Address: low-level delegate call failed&quot;);</expressions>
+    </clauses>
+    <clauses name="functionDelegateCall" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="bytes"/>
+      <expressions>(bool success, bytes memory returndata) = target.delegatecall</expressions>
+      <expressions>(data);</expressions>
+      <expressions>return verifyCallResultFromTarget(target, success, returndata, errorMessage);</expressions>
+    </clauses>
+    <clauses name="verifyCallResultFromTarget" visibilityAccess="internal">
+      <inputParams type="address " valueInput="target"/>
+      <inputParams type="bool" valueInput="success"/>
+      <inputParams type="bytes" valueInput="returndata"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="bytes"/>
+      <conditions condition="success">
+        <expressions>return returndata;</expressions>
+        <conditionalExpr condition="returndata.length == 0">
+          <restriction xsi:type="smaC:Restriction" expr1="isContract(target)" message="&quot;Address: call to non-contract&quot;"/>
+        </conditionalExpr>
+        <expressionsElse>_revert(returndata, errorMessage);</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="verifyCallResult" visibilityAccess="internal" predefinedModifier="pure">
+      <inputParams type="bool" valueInput="success"/>
+      <inputParams type="bytes" valueInput="returndata"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <outputParams type="bytes"/>
+      <conditions condition="success">
+        <expressions>return returndata;</expressions>
+        <expressionsElse>_revert(returndata, errorMessage);</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="_revert" visibilityAccess="private" predefinedModifier="pure">
+      <inputParams type="bytes" valueInput="returndata"/>
+      <inputParams type="string" valueInput="errorMessage"/>
+      <conditions condition="returndata.length > 0">
+        <expressions>assembly { let returndata_size := mload(returndata) x := add(32, returndata) revert(x, returndata_size) }</expressions>
+        <expressionsElse>revert(errorMessage);</expressionsElse>
+      </conditions>
+    </clauses>
+  </contracts>
+</smaC:File>
