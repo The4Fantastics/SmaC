@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <contracts name="NegotiationMarketPlace">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint8" visibility="private" name="buyerCount"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint8" visibility="private" name="sellerCount"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address payable" name="dsoAgent"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " array="[]" name="agentsList"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="marketEndTime"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" type="bool" name="ended"/>
+    <localMappingProperties visibility="private" nameMapping="bidPrice">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="bidQuantity">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="bidWeight">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties nameMapping="agentType">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <constructors type="public" payable="payable">
+      <attributesInitialization>dsoAgent = msg.sender;</attributesInitialization>
+      <attributesInitialization>buyerCount = 0;</attributesInitialization>
+      <attributesInitialization>sellerCount = 0;</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOperator">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="dsoAgent" message="&quot;Only DSO/Operator can call this.&quot;"/>
+    </modifiers>
+    <events name="LogBidMade">
+      <inputParams type="address " indexed="indexed" valueInput="accountAddress"/>
+      <inputParams type="uint" valueInput="price"/>
+      <inputParams type="uint" valueInput="quantity"/>
+      <inputParams type="uint" valueInput="Weight"/>
+    </events>
+    <clauses name="submitBid">
+      <inputParams type="uint" valueInput="_bidprice"/>
+      <inputParams type="uint" valueInput="_bidquantity"/>
+      <inputParams type="uint" valueInput="_bidweight"/>
+      <inputParams type="uint" valueInput="_agenttype"/>
+      <outputParams type="uint"/>
+      <conditions condition="_agenttype == 1">
+        <expressions>buyerCount++;</expressions>
+        <expressionsElse>sellerCount++;</expressionsElse>
+      </conditions>
+      <expressions>bidPrice[msg.sender] = _bidprice;</expressions>
+      <expressions>bidQuantity[msg.sender] = _bidquantity;</expressions>
+      <expressions>bidWeight[msg.sender] = _bidweight;</expressions>
+      <expressions>agentType[msg.sender] = _agenttype;</expressions>
+      <expressions>return agentType[msg.sender];</expressions>
+    </clauses>
+    <clauses name="retrievebid" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams type="address " valueInput="agentaddress"/>
+      <outputParams type="uint" array="[4]"/>
+      <conditions condition="bidPrice[agentaddress] != 0">
+        <expressions>array[0] = bidPrice[agentaddress];</expressions>
+        <expressions>array[1] = bidQuantity[agentaddress];</expressions>
+        <expressions>array[2] = bidWeight[agentaddress];</expressions>
+        <expressions>array[3] = agentType[agentaddress];</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" array="[4]" name="array"/>
+      <expressions>return array;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

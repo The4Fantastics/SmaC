@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <contracts name="NegotiationMarketPlace">
+    <localEnumerators nameEnumerator="State">
+      <values>BID_DEPOSIT_OPEN</values>
+      <values>BID_DEPOSIT_OVER</values>
+      <values>AWAITING_DELIVERY</values>
+      <values>COMPLETE</values>
+      <values>FINISHED</values>
+    </localEnumerators>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint8" visibility="private" name="buyerCount"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint8" visibility="private" name="sellerCount"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" visibility="private" name="operationalDeposit"/>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="State" name="currState"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address payable" name="dsoAgent"/>
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="marketEndTime"/>
+    <localProperties xsi:type="smaC:PropertyBoolean" type="bool" name="ended"/>
+    <localMappingProperties visibility="private" nameMapping="bidPrice">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="bidQuantity">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="bidWeight">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties nameMapping="agentType">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="depositAmount">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <constructors type="public" payable="payable">
+      <attributesInitialization>dsoAgent = msg.sender;</attributesInitialization>
+      <attributesInitialization>buyerCount = 0;</attributesInitialization>
+      <attributesInitialization>sellerCount = 0;</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOperator">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="dsoAgent" message="&quot;Only DSO/Operator can call this.&quot;"/>
+    </modifiers>
+    <events name="LogBidMade">
+      <inputParams type="address " indexed="indexed" valueInput="accountAddress"/>
+      <inputParams type="uint" valueInput="price"/>
+      <inputParams type="uint" valueInput="quantity"/>
+      <inputParams type="uint" valueInput="Weight"/>
+    </events>
+    <clauses name="operationaldeposit" personalizedModifier="//@contracts.0/@modifiers.0" predefinedModifier="payable">
+      <outputParams type="uint"/>
+      <expressions>operationalDeposit = operationalDeposit+msg.value;</expressions>
+      <expressions>return 1;</expressions>
+    </clauses>
+    <clauses name="submitBid" predefinedModifier="payable">
+      <inputParams type="uint" valueInput="_bidprice"/>
+      <inputParams type="uint" valueInput="_bidquantity"/>
+      <inputParams type="uint" valueInput="_bidweight"/>
+      <inputParams type="uint" valueInput="_agenttype"/>
+      <outputParams type="uint"/>
+      <conditions condition="_agenttype == 1">
+        <expressions>buyerCount++;</expressions>
+        <expressionsElse>sellerCount++;</expressionsElse>
+      </conditions>
+      <expressions>bidPrice[msg.sender] = _bidprice;</expressions>
+      <expressions>bidQuantity[msg.sender] = _bidquantity;</expressions>
+      <expressions>bidWeight[msg.sender] = _bidweight;</expressions>
+      <expressions>agentType[msg.sender] = _agenttype;</expressions>
+      <expressions>depositAmount[msg.sender] = msg.value;</expressions>
+      <expressions>return agentType[msg.sender];</expressions>
+    </clauses>
+    <clauses name="getbalance">
+      <inputParams type="address " valueInput="agentaddress"/>
+      <outputParams type="uint"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="out"/>
+      <expressions>out = depositAmount[agentaddress];</expressions>
+      <expressions>return out;</expressions>
+    </clauses>
+    <clauses name="getrealbalance">
+      <inputParams type="address " valueInput="agentaddress"/>
+      <outputParams type="uint"/>
+      <conditions condition="agentaddress!=dsoAgent">
+        <expressions>out = agentaddress.balance;</expressions>
+        <expressionsElse>out = dsoAgent.balance;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="out"/>
+      <expressions>return out;</expressions>
+    </clauses>
+    <clauses name="retrievebid">
+      <inputParams type="address " valueInput="agentaddress"/>
+      <outputParams type="uint" array="[5]"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="dsoAgent" message="&quot;Only DSO/Operator can call this.&quot;"/>
+      <conditions condition="bidPrice[agentaddress] != 0">
+        <expressions>array[0] = bidPrice[agentaddress];</expressions>
+        <expressions>array[1] = bidQuantity[agentaddress];</expressions>
+        <expressions>array[2] = bidWeight[agentaddress];</expressions>
+        <expressions>array[3] = agentType[agentaddress];</expressions>
+        <expressions>array[4] = depositAmount[agentaddress];</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" array="[5]" name="array"/>
+      <expressions>return array;</expressions>
+    </clauses>
+    <clauses name="settlement" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0">
+      <inputParams type="address " valueInput="buyeraddress"/>
+      <inputParams type="address payable" valueInput="selleraddress"/>
+      <inputParams type="uint" valueInput="pricetopay"/>
+      <conditions condition="depositAmount[buyeraddress]>pricetopay">
+        <expressions>depositAmount[selleraddress] = depositAmount[selleraddress]+pricetopay;</expressions>
+        <expressions>depositAmount[buyeraddress] = depositAmount[buyeraddress] - pricetopay;</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="close" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0" predefinedModifier="payable">
+      <inputParams type="address payable" valueInput="agentaddress"/>
+      <conditions condition="agentaddress!=dsoAgent">
+        <expressions>agentaddress.transfer(depositAmount[agentaddress]);</expressions>
+        <expressionsElse>dsoAgent.transfer(operationalDeposit);</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="closecontract" visibilityAccess="external" personalizedModifier="//@contracts.0/@modifiers.0" predefinedModifier="payable">
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="fee"/>
+      <expressions>fee = 1000000000000000000;</expressions>
+      <expressions>msg.sender.transfer</expressions>
+      <expressions>(operationalDeposit-fee);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
