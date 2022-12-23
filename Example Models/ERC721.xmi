@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol=">" numberVersion="0.6.0"/>
+  <imports name="&quot;https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Address.sol&quot;"/>
+  <imports name="&quot;https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Strings.sol&quot;"/>
+  <interfaces name="IERC165">
+    <interfaceFunction name="supportsInterface" modifier="view">
+      <inputParams type="bytes4" valueInput="interfaceId"/>
+      <outputParams type="bool"/>
+    </interfaceFunction>
+  </interfaces>
+  <contracts name="ERC165" superType="//@interfaces.0">
+    <clauses name="supportsInterface" virtual="virtual">
+      <inputParams type="bytes4" valueInput="interfaceId"/>
+      <outputParams type="bool"/>
+      <expressions>return interfaceId == type(IERC165).interfaceId;</expressions>
+    </clauses>
+  </contracts>
+  <contracts name="Context">
+    <clauses name="_msgSender" visibilityAccess="internal" virtual="virtual">
+      <outputParams type="address "/>
+      <expressions>return msg.sender;</expressions>
+    </clauses>
+    <clauses name="_msgData" visibilityAccess="internal" virtual="virtual">
+      <outputParams type="bytes" storageData="calldata"/>
+      <expressions>return msg.data;</expressions>
+    </clauses>
+  </contracts>
+  <contracts name="Ownable" superType="//@contracts.1">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " visibility="private" name="_owner"/>
+    <constructors type="public">
+      <attributesInitialization>_transferOwnership(_msgSender());</attributesInitialization>
+    </constructors>
+    <modifiers name="onlyOwner">
+      <conditionRestricion xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </modifiers>
+    <events name="OwnershipTransferred">
+      <inputParams type="address " indexed="indexed" valueInput="previousOwner"/>
+      <inputParams type="address " indexed="indexed" valueInput="newOwner"/>
+    </events>
+    <clauses name="owner" virtual="virtual">
+      <outputParams type="address "/>
+      <expressions>return _owner;</expressions>
+    </clauses>
+    <clauses name="_checkOwner" visibilityAccess="internal" virtual="virtual">
+      <restriction xsi:type="smaC:Restriction" expr1="owner()" operator="==" expr2="_msgSender()" message="&quot;Ownable: caller is not the owner&quot;"/>
+    </clauses>
+    <clauses name="renounceOwnership" personalizedModifier="//@contracts.2/@modifiers.0">
+      <expressions>_transferOwnership(address(0));</expressions>
+    </clauses>
+    <clauses name="transferOwnership" personalizedModifier="//@contracts.2/@modifiers.0">
+      <inputParams type="address " valueInput="newOwner"/>
+      <restriction xsi:type="smaC:Restriction" expr1="newOwner" operator="!=" expr2="address(0)" message="&quot;Ownable: new owner is the zero address&quot;"/>
+      <expressions>_transferOwnership(newOwner);</expressions>
+    </clauses>
+    <clauses name="_transferOwnership" visibilityAccess="internal" virtual="virtual" event="//@contracts.2/@events.0">
+      <inputParams type="address " valueInput="newOwner"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="oldOwner" inicialization="_owner"/>
+      <expressions>_owner = newOwner;</expressions>
+      <inputParamsEvent valueInput="oldOwner"/>
+      <inputParamsEvent valueInput="newOwner"/>
+    </clauses>
+  </contracts>
+  <contracts name="ERC721" superType="//@contracts.1 //@contracts.2 //@contracts.0">
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="private" name="_name"/>
+    <localProperties xsi:type="smaC:PropertyString" type="string" visibility="private" name="_symbol"/>
+    <localMappingProperties visibility="private" nameMapping="_owners">
+      <type type="mapping" key="uint256" value="address "/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="_balances">
+      <type type="mapping" key="address " value="uint256"/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="_tokenApprovals">
+      <type type="mapping" key="uint256" value="address "/>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="_operatorApprovals">
+      <type type="mapping" key="address ">
+        <valueIdentifier type="mapping" key="address " value="bool"/>
+      </type>
+    </localMappingProperties>
+    <localMappingProperties visibility="private" nameMapping="_tokenURIs">
+      <type type="mapping" key="uint256" value="string"/>
+    </localMappingProperties>
+    <libraries href="/SMAC_MODELS/ERC721.sce#|8"/>
+    <libraries href="/SMAC_MODELS/ERC721.sce#|9"/>
+    <constructors type="public">
+      <inputParams type="string" valueInput="name_"/>
+      <inputParams type="string" valueInput="symbol_"/>
+      <attributesInitialization>_name = name_;</attributesInitialization>
+      <attributesInitialization>_symbol = symbol_;</attributesInitialization>
+    </constructors>
+    <events name="Transfer">
+      <inputParams type="address " indexed="indexed" valueInput="_from"/>
+      <inputParams type="address " indexed="indexed" valueInput="_to"/>
+      <inputParams type="uint256" valueInput="_tokenId"/>
+    </events>
+    <events name="Approval">
+      <inputParams type="address " indexed="indexed" valueInput="_owner"/>
+      <inputParams type="address " indexed="indexed" valueInput="_approved"/>
+      <inputParams type="uint256" valueInput="_tokenId"/>
+    </events>
+    <events name="ApprovalForAll">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="operator"/>
+      <inputParams type="bool" valueInput="approved"/>
+    </events>
+    <clauses name="balanceOf">
+      <inputParams type="address " valueInput="owner"/>
+      <outputParams type="uint256"/>
+      <restriction xsi:type="smaC:Restriction" expr1="owner" operator="!=" expr2="address(0)" message="&quot;ERC721: address zero is not a valid owner&quot;"/>
+      <expressions>return _balances[owner];</expressions>
+    </clauses>
+    <clauses name="ownerOf">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="address "/>
+      <restriction xsi:type="smaC:Restriction" expr1="owner" operator="!=" expr2="address(0)" message="&quot;ERC721: invalid token ID&quot;"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_ownerOf(tokenId)"/>
+      <expressions>return owner;</expressions>
+    </clauses>
+    <clauses name="name">
+      <outputParams type="string"/>
+      <expressions>return _name;</expressions>
+    </clauses>
+    <clauses name="symbol">
+      <outputParams type="string"/>
+      <expressions>return _symbol;</expressions>
+    </clauses>
+    <clauses name="tokenURI" virtual="virtual">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="string"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="baseURI" inicialization="_baseURI()"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="result" inicialization="abi.encodePacked(baseURI, tokenId)"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="result_string"/>
+      <expressions>_requireMinted(tokenId);</expressions>
+      <expressions>result_string = string(result);</expressions>
+      <expressions>return result_string;</expressions>
+    </clauses>
+    <clauses name="_setTokenURI" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <inputParams type="string" valueInput="_tokenURI"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_exists(tokenId)" message="&quot;ERC721URIStorage: URI set of nonexistent token&quot;"/>
+      <expressions>_tokenURIs[tokenId] = _tokenURI;</expressions>
+    </clauses>
+    <clauses name="tokenURI">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="string"/>
+      <conditions condition="base_byte.length == 0">
+        <expressions>return _tokenURI;</expressions>
+      </conditions>
+      <conditions condition="_tokenURI_byte.length > 0">
+        <properties xsi:type="smaC:PropertyBytes" type="bytes" name="result" inicialization="abi.encodePacked(base, _tokenURI)"/>
+        <expressions>return string(result);</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyString" type="string" name="_tokenURI" inicialization="_tokenURIs[tokenId]"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="base" inicialization="_baseURI()"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="base_byte" inicialization="base"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="_tokenURI_byte" inicialization="_tokenURI"/>
+      <expressions>_requireMinted(tokenId);</expressions>
+      <expressions>return super.tokenURI(tokenId);</expressions>
+    </clauses>
+    <clauses name="_baseURI" visibilityAccess="internal">
+      <outputParams type="string"/>
+      <expressions>return &quot;&quot;;</expressions>
+    </clauses>
+    <clauses name="approve">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <restriction xsi:type="smaC:Restriction" expr1="to" operator="!=" expr2="owner" message="&quot;ERC721: approval to current owner&quot;"/>
+      <conditions condition="owner == var_msg">
+        <expressions>found = true;</expressions>
+      </conditions>
+      <conditions condition="isApprovedForAll(owner, _msgSender())">
+        <expressions>found = true;</expressions>
+      </conditions>
+      <conditions condition="found == false">
+        <expressions>revert();</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="this.ownerOf(tokenId)"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="found" inicialization="false"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="var_msg" inicialization="_msgSender()"/>
+      <expressions>_approve(to, tokenId);</expressions>
+    </clauses>
+    <clauses name="getApproved">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="address "/>
+      <expressions>_requireMinted(tokenId);</expressions>
+      <expressions>return _tokenApprovals[tokenId];</expressions>
+    </clauses>
+    <clauses name="setApprovalForAll">
+      <inputParams type="address " valueInput="operator"/>
+      <inputParams type="bool" valueInput="approved"/>
+      <expressions>_setApprovalForAll(_msgSender(), operator, approved);</expressions>
+    </clauses>
+    <clauses name="isApprovedForAll">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="operator"/>
+      <outputParams type="bool"/>
+      <expressions>return _operatorApprovals[owner][operator];</expressions>
+    </clauses>
+    <clauses name="transferFrom">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_isApprovedOrOwner(_msgSender(), tokenId)" message="&quot;ERC721: caller is not token owner or approved&quot;"/>
+      <expressions>_transfer(_from, to, tokenId);</expressions>
+    </clauses>
+    <clauses name="safeTransferFrom">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <expressions>safeTransferFrom(_from, to, tokenId, &quot;&quot;);</expressions>
+    </clauses>
+    <clauses name="safeTransferFrom">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_isApprovedOrOwner(_msgSender(), tokenId)" message="&quot;ERC721: caller is not token owner or approved&quot;"/>
+      <expressions>_safeTransfer(_from, to, tokenId, data);</expressions>
+    </clauses>
+    <clauses name="_safeTransfer" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <expressions>_transfer(_from, to, tokenId);</expressions>
+    </clauses>
+    <clauses name="_ownerOf" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="address "/>
+      <expressions>return _owners[tokenId];</expressions>
+    </clauses>
+    <clauses name="_exists" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="bool"/>
+      <conditions condition="owner != _Address">
+        <expressions>return false;</expressions>
+        <expressionsElse>return true;</expressionsElse>
+      </conditions>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="_Address" inicialization="address(0)"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_ownerOf(tokenId)"/>
+    </clauses>
+    <clauses name="_isApprovedOrOwner" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="address " valueInput="spender"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <outputParams type="bool"/>
+      <conditions condition="spender == owner">
+        <expressions>equal_condition = true;</expressions>
+      </conditions>
+      <conditions condition="isApprovedForAll(owner, spender)">
+        <expressions>equal_condition = isApprovedForAll(owner, spender);</expressions>
+      </conditions>
+      <conditions condition="aprove_address == spender">
+        <expressions>equal_condition = true;</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="this.ownerOf(tokenId)"/>
+      <properties xsi:type="smaC:PropertyBoolean" type="bool" name="equal_condition" inicialization="false"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="aprove_address" inicialization="getApproved(tokenId)"/>
+      <expressions>return equal_condition;</expressions>
+    </clauses>
+    <clauses name="_safeMint" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <expressions>_safeMint(to, tokenId, &quot;&quot;);</expressions>
+    </clauses>
+    <clauses name="_safeMint" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <inputParams type="bytes" valueInput="data"/>
+      <expressions>_mint(to, tokenId);</expressions>
+    </clauses>
+    <clauses name="_mint" visibilityAccess="internal" virtual="virtual" event="//@contracts.3/@events.0">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <restriction xsi:type="smaC:Restriction" expr1="to" operator="!=" expr2="address(0)" message="&quot;ERC721: mint to the zero address&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_exists(tokenId)" message="&quot;ERC721: token already minted&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_exists(tokenId)" message="&quot;ERC721: token already minted&quot;"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="account" inicialization="address(0)"/>
+      <expressions>_beforeTokenTransfer(address(0), to, tokenId, 1);</expressions>
+      <expressions>_balances[to] += 1;</expressions>
+      <expressions>_owners[tokenId] = to;</expressions>
+      <expressions>_afterTokenTransfer(address(0), to, tokenId, 1);</expressions>
+      <inputParamsEvent valueInput="account"/>
+      <inputParamsEvent valueInput="to"/>
+      <inputParamsEvent valueInput="tokenId"/>
+    </clauses>
+    <clauses name="_burn" visibilityAccess="internal" virtual="virtual" event="//@contracts.3/@events.0">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <conditions condition="byteTokens.length != 0">
+        <expressions>delete _tokenURIs[tokenId];</expressions>
+      </conditions>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="this.ownerOf(tokenId)"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="account" inicialization="address(0)"/>
+      <properties xsi:type="smaC:PropertyString" type="string" name="tokens"/>
+      <properties xsi:type="smaC:PropertyBytes" type="bytes" name="byteTokens" inicialization="bytes(tokens)"/>
+      <expressions>_beforeTokenTransfer(owner, address(0), tokenId, 1);</expressions>
+      <expressions>owner = this.ownerOf</expressions>
+      <expressions>(tokenId);</expressions>
+      <expressions>delete _tokenApprovals[tokenId];</expressions>
+      <expressions>_balances[owner] -= 1;</expressions>
+      <expressions>delete _owners[tokenId];</expressions>
+      <expressions>tokens = _tokenURIs[tokenId];</expressions>
+      <expressions>_afterTokenTransfer(owner, address(0), tokenId, 1);</expressions>
+      <inputParamsEvent valueInput="owner"/>
+      <inputParamsEvent valueInput="account"/>
+      <inputParamsEvent valueInput="tokenId"/>
+    </clauses>
+    <clauses name="_transfer" visibilityAccess="internal" virtual="virtual" event="//@contracts.3/@events.0">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <restriction xsi:type="smaC:Restriction" expr1="this.ownerOf(tokenId)" operator="==" expr2="_from" message="&quot;ERC721: transfer from incorrect owner&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="to" operator="!=" expr2="address(0)" message="&quot;ERC721: transfer to the zero address&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="this.ownerOf(tokenId)" operator="==" expr2="_from" message="&quot;ERC721: transfer from incorrect owner&quot;"/>
+      <expressions>_beforeTokenTransfer(_from, to, tokenId, 1);</expressions>
+      <expressions>delete _tokenApprovals[tokenId];</expressions>
+      <expressions>_balances[_from] -= 1;</expressions>
+      <expressions>_balances[to] += 1;</expressions>
+      <expressions>_owners[tokenId] = to;</expressions>
+      <expressions>_afterTokenTransfer(_from, to, tokenId, 1);</expressions>
+      <inputParamsEvent valueInput="_from"/>
+      <inputParamsEvent valueInput="to"/>
+      <inputParamsEvent valueInput="tokenId"/>
+    </clauses>
+    <clauses name="_approve" visibilityAccess="internal" virtual="virtual" event="//@contracts.3/@events.1">
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <properties xsi:type="smaC:PropertyAddress" type="address " name="owner_token" inicialization="this.ownerOf(tokenId)"/>
+      <expressions>_tokenApprovals[tokenId] = to;</expressions>
+      <inputParamsEvent valueInput="owner_token"/>
+      <inputParamsEvent valueInput="to"/>
+      <inputParamsEvent valueInput="tokenId"/>
+    </clauses>
+    <clauses name="_setApprovalForAll" visibilityAccess="internal" virtual="virtual" event="//@contracts.3/@events.2">
+      <inputParams type="address " valueInput="owner"/>
+      <inputParams type="address " valueInput="operator"/>
+      <inputParams type="bool" valueInput="approved"/>
+      <restriction xsi:type="smaC:Restriction" expr1="owner" operator="!=" expr2="operator" message="&quot;ERC721: approve to caller&quot;"/>
+      <expressions>_operatorApprovals[owner][operator] = approved;</expressions>
+      <inputParamsEvent valueInput="owner"/>
+      <inputParamsEvent valueInput="operator"/>
+      <inputParamsEvent valueInput="approved"/>
+    </clauses>
+    <clauses name="_requireMinted" visibilityAccess="internal">
+      <inputParams type="uint256" valueInput="tokenId"/>
+      <restriction xsi:type="smaC:Restriction" expr1="_exists(tokenId)" message="&quot;ERC721: invalid token ID&quot;"/>
+    </clauses>
+    <clauses name="_beforeTokenTransfer" visibilityAccess="internal" virtual="virtual">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="firstTokenId"/>
+      <inputParams type="uint256" valueInput="batchSize"/>
+      <conditions condition="batchSize > 1">
+        <conditionalExpr condition="_from != address(0)">
+          <expressions>_balances[_from] -= batchSize;</expressions>
+        </conditionalExpr>
+        <conditionalExpr condition="to != address(0)">
+          <expressions>_balances[to] += batchSize;</expressions>
+        </conditionalExpr>
+      </conditions>
+    </clauses>
+    <clauses name="_afterTokenTransfer" visibilityAccess="internal">
+      <inputParams type="address " valueInput="_from"/>
+      <inputParams type="address " valueInput="to"/>
+      <inputParams type="uint256" valueInput="firstTokenId"/>
+      <inputParams type="uint256" valueInput="batchSize"/>
+    </clauses>
+  </contracts>
+</smaC:File>

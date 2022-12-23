@@ -177,7 +177,7 @@ contract ERC721 is Context,Ownable,ERC165{
     }
 
 	
-	 /*function tokenURI(uint256 tokenId) public view virtual  returns (string memory) {
+	 function tokenURI(uint256 tokenId) public view virtual  returns (string memory) {
          _requireMinted(tokenId);
 
         string memory baseURI = _baseURI();
@@ -185,7 +185,7 @@ contract ERC721 is Context,Ownable,ERC165{
         string memory result_string;
         result_string = string(result);
         return result_string;
-    }*/
+    }
 
     function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
         require(_exists(tokenId), "ERC721URIStorage: URI set of nonexistent token");
@@ -612,5 +612,4 @@ contract ERC721 is Context,Ownable,ERC165{
     }
 }
     
-
 
