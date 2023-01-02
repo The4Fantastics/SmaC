@@ -234,8 +234,8 @@
       <inputParams type="uint256" valueInput="tokenId"/>
       <outputParams type="bool"/>
       <conditions condition="owner != _Address">
-        <expressions>return false;</expressions>
-        <expressionsElse>return true;</expressionsElse>
+        <expressions>return true;</expressions>
+        <expressionsElse>return false;</expressionsElse>
       </conditions>
       <properties xsi:type="smaC:PropertyAddress" type="address " name="_Address" inicialization="address(0)"/>
       <properties xsi:type="smaC:PropertyAddress" type="address " name="owner" inicialization="_ownerOf(tokenId)"/>
