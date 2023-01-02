@@ -354,9 +354,9 @@ contract ERC721 is Context,Ownable,ERC165{
         address _Address = address(0);
         address owner = _ownerOf(tokenId);
         if(owner != _Address){
-        	return false;
+            return true;
         }else{
-        	return true;
+            return false;
         }
     }
 
