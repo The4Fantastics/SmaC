@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <contracts name="bankAccount">
+    <localEnumerators nameEnumerator="StateEnum">
+      <values>Inactivated</values>
+      <values>Activated</values>
+      <values>Deposit</values>
+      <values>Withdraw</values>
+    </localEnumerators>
+    <localProperties xsi:type="smaC:PropertyIdentifier" type="StateEnum" name="State"/>
+    <localProperties xsi:type="smaC:PropertyInteger" type="int32" name="transaction_input"/>
+    <localProperties xsi:type="smaC:PropertyInteger" type="int32" name="balance"/>
+    <constructors type="public">
+      <attributesInitialization>State = StateEnum.Inactivated;</attributesInitialization>
+      <attributesInitialization>executeStateEntryAction();</attributesInitialization>
+    </constructors>
+    <clauses name="activateAccount">
+      <conditions condition="State == StateEnum.Inactivated">
+        <expressions>executeStateExitAction();</expressions>
+        <expressions>State = StateEnum.Activated;</expressions>
+        <expressions>executeStateEntryAction();</expressions>
+        <expressionsElse>executeStateDuringAction();</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="deposit">
+      <conditions condition="State == StateEnum.Activated">
+        <expressions>executeStateExitAction();</expressions>
+        <expressions>State = StateEnum.Deposit;</expressions>
+        <expressions>executeStateEntryAction();</expressions>
+        <expressionsElse>executeStateDuringAction();</expressionsElse>
+      </conditions>
+    </clauses>
+    <clauses name="executeStateEntryAction" visibilityAccess="internal">
+      <conditions condition="State == StateEnum.Inactivated">
+        <expressions>balance = int32(0);</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="executeStateDuringAction" visibilityAccess="internal"/>
+    <clauses name="executeActivatedEntryAction" visibilityAccess="internal">
+      <conditions condition="State == StateEnum.Inactivated">
+        <expressions>balance = int32(0);</expressions>
+        <expressions>State = Activated;</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="executeStateExitAction" visibilityAccess="internal">
+      <conditions condition="State == StateEnum.Deposit">
+        <expressions>balance = balance + transaction_input;</expressions>
+      </conditions>
+      <conditions condition="State == StateEnum.Withdraw">
+        <expressions>balance = balance - transaction_input;</expressions>
+      </conditions>
+    </clauses>
+    <clauses name="displayData">
+      <outputParams type="int32"/>
+      <outputParams type="int32"/>
+      <expressions>return (transaction_input, balance);</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
