@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.8.7"/>
+  <contracts name="VendingMachine">
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="owner"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="smartcontract"/>
+    <localMappingProperties nameMapping="cupcakeBalances">
+      <type type="mapping" key="address " value="uint"/>
+    </localMappingProperties>
+    <constructors type="public">
+      <attributesInitialization>owner = msg.sender;</attributesInitialization>
+      <attributesInitialization>smartcontract = address(this);</attributesInitialization>
+      <attributesInitialization>cupcakeBalances[smartcontract] = 100;</attributesInitialization>
+    </constructors>
+    <clauses name="refill">
+      <inputParams type="uint" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="owner" message="&quot;Only the owner can refill.&quot;"/>
+      <expressions>cupcakeBalances[smartcontract] += amount;</expressions>
+    </clauses>
+    <clauses name="purchase" predefinedModifier="payable">
+      <inputParams type="uint" valueInput="amount"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.value" operator=">=" expr2="amount * 1 ether" message="&quot;You must pay at least 1 ETH per cupcake&quot;"/>
+      <restriction xsi:type="smaC:Restriction" expr1="cupcakeBalances[smartcontract]" operator=">=" expr2="amount" message="&quot;Not enough cupcakes in stock to complete this purchase&quot;"/>
+      <expressions>cupcakeBalances[smartcontract] -= amount;</expressions>
+      <expressions>cupcakeBalances[msg.sender] += amount;</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>

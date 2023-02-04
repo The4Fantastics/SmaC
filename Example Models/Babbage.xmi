@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ASCII"?>
+<smaC:File xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smaC="http://www.xtext.org/SmaC">
+  <version symbol="^" numberVersion="0.4.10"/>
+  <contracts name="AdjustableSplitter">
+    <localProperties xsi:type="smaC:PropertyUInteger" type="uint" name="splitter_setting" inicialization="25"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="controller" inicialization="0xac23628D25A36ba7834fd171Dc3F794F12A0C109"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="exit1" inicialization="0xfFD93fBFA184B6dfaaA8684B97Ec3F71dcfde8C6"/>
+    <localProperties xsi:type="smaC:PropertyAddress" type="address " name="exit2" inicialization="0xff5dad1Db92AF1987A10Fc62D2B93F14f6E0b112"/>
+    <clauses name="receiveEther" predefinedModifier="payable">
+      <expressions>splitter_etherInjected(msg.value);</expressions>
+    </clauses>
+    <clauses name="splitter_etherInjected" visibilityAccess="internal">
+      <inputParams type="uint" valueInput="amount"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="setting" inicialization="splitter_setting"/>
+      <properties xsi:type="smaC:PropertyUInteger" type="uint" name="amount_toLeft" inicialization="amount * setting / 100"/>
+      <expressions>pipe1_etherInjected(amount_toLeft);</expressions>
+      <expressions>pipe2_etherInjected(amount - amount_toLeft);</expressions>
+    </clauses>
+    <clauses name="splitter_adjustSetting" visibilityAccess="internal">
+      <inputParams type="uint" valueInput="setting"/>
+      <restriction xsi:type="smaC:Restriction" expr1="setting" operator="&lt;=" expr2="100"/>
+      <expressions>splitter_setting = setting;</expressions>
+    </clauses>
+    <clauses name="pipe1_etherInjected" visibilityAccess="internal">
+      <inputParams type="uint" valueInput="amount"/>
+      <expressions>exit1.transfer(amount);</expressions>
+    </clauses>
+    <clauses name="pipe2_etherInjected" visibilityAccess="internal">
+      <inputParams type="uint" valueInput="amount"/>
+      <expressions>exit2.transfer(amount);</expressions>
+    </clauses>
+    <clauses name="rod1_moved">
+      <inputParams type="uint" valueInput="toSetting"/>
+      <restriction xsi:type="smaC:Restriction" expr1="msg.sender" operator="==" expr2="controller"/>
+      <expressions>splitter_adjustSetting(toSetting);</expressions>
+    </clauses>
+    <clauses name="receive" predefinedModifier="payable">
+      <expressions>receiveEther();</expressions>
+    </clauses>
+  </contracts>
+</smaC:File>
