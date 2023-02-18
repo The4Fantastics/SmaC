@@ -76,5 +76,5 @@ ________________________
   10.Define contract's function(s).
 
 * You have a series of smart contract models represented by blocks that follow standards, such as ERC20, ERC223, etc. To use them, you must select the "Standards" option and select the standard you want:
-  ![Standards SmaCly](https://github.com/CristianGM23/SmacBlockly/blob/master/Images/erc20smacly.PNG) 
+  ![Standards SmaCly](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/erc20smacly.PNG) 
 
