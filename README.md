@@ -68,23 +68,25 @@ ________________________
 
   1.Define compiler's version **(Obligatory).**
 
-  2.Define libraries.
-  
-  3.Define import(s).
+  2.Define import(s).
+
+  3.Define libraries.
   
   4.Define interface(s).
+  
+  5.Define asbtract contract(s).
 
-  5.Define contracts **(At least 1).**
+  6.Define contracts **(At least 1).**
 
-  6.Define local variable(s).
+  7.Define local variable(s) (structs, address, uint, byte, string, enums, etc.).
 
-  7.Define contract's constructor(s).
+  8.Define contract's constructor(s).
 
-  8.Define contract's modifier(s).
+  9.Define contract's modifier(s).
 
-  9.Define contract's event(s).
+  10.Define contract's event(s).
 
-  10.Define contract's function(s).
+  11.Define contract's function(s).
 
 * When defining a contract using the tool, it proposes code autocomplete suggestions using the CTRL + SPACE key combination
 
