@@ -50,6 +50,7 @@ _______________
   
 * Video demonstration of the technological bridge between SmaC and SmaCly:
 
+ ![Technological bridge](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/transform_file.gif)
 
 **Tips**
 ________________________
