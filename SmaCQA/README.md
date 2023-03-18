@@ -17,7 +17,7 @@ _______________
 **SmaCQA Metamodel View**
 _______________________
 
-![SmaCQA tool](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/smacqametamodel.png)
+![SmaCQA tool](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/smacqametamodel.png)
 _______________
 
 **Technological bridge between SmaC and SmaCly**
