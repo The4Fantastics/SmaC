@@ -1,6 +1,6 @@
 **SmaCQA Tool**
 ================
-SmaCQA is a textual DSL developed with the Xtext tool incorporated in the Sirius framework. SmaCQA arises due to the limitation of the e3value notation to represent the circumstances in which value exchanges take place between the actors that are part of the model presented in this notation. This limitation complicates the establishment of a useful technological bridge using MDE to extract, from an e3value model, its corresponding smart contract model. Therefore, SmaCQA acts as support during the transformation process between models, supporting the information specified by the user about the temporal, economic, etc. context for each value exchange produced between actors.
+SmaCQA is a textual DSL developed using the Xtext tool incorporated into the Sirius framework. SmaCQA arises due to the limitation of the e3value notation to represent the circumstances in which value exchanges take place between the actors that are part of the model presented in this notation. This limitation makes it difficult to establish a useful technological bridge using MDE to extract, from an e3value model, its corresponding smart contract model. Therefore, the purpose of SmaCQA is to act as support during the model transformation process, supporting the information specified by the user regarding the temporal and economic context for each value exchange between actors.
 
 **SmaCly Tool Display**
 _______________
