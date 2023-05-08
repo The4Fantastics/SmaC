@@ -5,7 +5,7 @@ SmaCQA is a textual DSL developed using the Xtext tool incorporated into the Sir
 **SmaCQA Tool Display**
 _______________
 
-![SmaCQA tool display](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaCly_Introduction.gif)
+![SmaCQA tool display](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/20230508_134207.gif)
 
 **ScreenCast**
 _______________
