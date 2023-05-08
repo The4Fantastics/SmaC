@@ -36,7 +36,7 @@ _______________
 
   4.Once the finish button has been pressed, a textual model will have been generated for the definition of value exchanges. It is necessary to specify the actors (In this case Developer and Investo) and the value object (In this case, Pledge) being traded for each value exchange in which we wish to reflect the inherent conditions of this.
 
-  ![SmaCQA Model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/erc20token.PNG)
+  ![SmaCQA Model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/smacqa_model.PNG)
   
 **Generate a HTML view from SmaCQA model**
 
@@ -46,6 +46,6 @@ To export the information collected in the textual question-and-answer model abo
 
 After this, the environment will generate a file with an HTML extension, which can be viewed by any browser. The file contains a visual representation in the form of a table, as shown in next Figure, with the information collected from the textual question-and-answer model.
 
-![HTML SmaCQA view](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/invoice.PNG)
+![HTML SmaCQA view](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/smacqa_model_html.PNG)
 
 
