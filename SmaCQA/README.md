@@ -29,11 +29,11 @@ _______________________
     1.4 Are the same conditions always maintained when exchanging value?
     1.5 ValueObjectQuestion (The questions collected below are mutually exclusive based on the nature of the object of value negotiated
     in the exchange of value).
-    • If the object of value being traded is a token, the user can specify the information in the following sets of responses according to the nature of the token. If the user wishes tospecify that the object of value is a non-fungible token (NFT), they must answer the set of specific questions for ERC-721 tokens shown in Tab. B.1. If it is a fungible token (ERC-20 and ERC-223), users must specify the information in the set of requested questions shown
+    * If the object of value being traded is a token, the user can specify the information in the following sets of responses according to the nature of the token. If the user wishes tospecify that the object of value is a non-fungible token (NFT), they must answer the set of specific questions for ERC-721 tokens shown in Tab. B.1. If it is a fungible token (ERC-20 and ERC-223), users must specify the information in the set of requested questions shown
     in Tab. B.2. B.2.
-    • If the object of value negotiated in the value exchange is a tangible entity that can be represented as a digital entity (not a token).
+    * If the object of value negotiated in the value exchange is a tangible entity that can be represented as a digital entity (not a token).
     What are the properties of that object? If the object of value being negotiated is a ''physical'' entity that possesses a series of properties and can be               represented digitally, the user can specify these by declaring the name of the property and the type of value associated with it (whether it is a text, a number,       or a property that reflects two opposing states)
-    • Is the object of value a right that can be reflected as active or in-active?. If the object of value is a negotiable right or service that can
+    * Is the object of value a right that can be reflected as active or in-active?. If the object of value is a negotiable right or service that can
 be considered as representing a situation represented by two opposite states
 _______________________
 **Create SmaCQA model**
