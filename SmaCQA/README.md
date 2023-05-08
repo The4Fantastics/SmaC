@@ -22,7 +22,7 @@ _______________
 
 **SmaCQA Questions**
 _______________________
-1.DataQuestion
+1. DataQuestion
     1.1 If the exchange of value is subject to a duration of time. What would this be? (indicated in minutes,days,weeks or years)
     1.2 If the exchange of value could only take place after a certain time. What would this be? (indicated in minutes,days,weeks or years)
     1.3 Can the value exchange be repeated over time?
