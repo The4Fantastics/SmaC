@@ -34,9 +34,9 @@ _______________
   
   ![File Option](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/root_smacqa.png)
 
-  4.The application will represent the smart contract model in the form of blocks.
+  4.Once the finish button has been pressed, a textual model will have been generated for the definition of value exchanges. It is necessary to specify the actors and    the value being traded for each value exchange in which we wish to reflect the inherent conditions of this..
 
-  ![See XML Model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly_import2.JPG)
+  ![SmaCQA Model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/erc20token.PNG)
   
 **Generate a HTML view from SmaCQA model**
 
