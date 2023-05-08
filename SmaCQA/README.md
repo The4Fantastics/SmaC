@@ -37,9 +37,16 @@ _______________
 
   ![See XML Model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly_import2.JPG)
   
-* Video demonstration of the technological bridge between SmaC and SmaCly:
+* Generate a HTML view from SmaCQA model:
 
- ![Technological bridge](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/transform_file.gif)
+To export the information collected in the textual question-and-answer model about an e{$^3$}value model to HTML format, click on the button in the IDE toolbar shown in next Figure:
+
+![Export to HTML](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly_import.jpg)
+
+After this, the environment will generate a file with an HTML extension, which can be viewed by any browser. The file contains a visual representation in the form of a table, as shown in next Figure, with the information collected from the textual question-and-answer model.
+
+![HTML SmaCQA view](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly_import.jpg)
+
 
 **Tips**
 ________________________
