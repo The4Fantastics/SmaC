@@ -36,6 +36,13 @@ _______________________
     What are the properties of that object? If the object of value being negotiated is a ''physical'' entity that possesses a series of properties and can be               represented digitally, the user can specify these by declaring the name of the property and the type of value associated with it (whether it is a text, a number,       or a property that reflects two opposing states)
     * Is the object of value a right that can be reflected as active or in-active?. If the object of value is a negotiable right or service that can
 be considered as representing a situation represented by two opposite states
+
+2. LegalQuestion
+    2.1 What would be the minimum legal age if necessary in this exchange?
+    2.2 What is the name of the tax? 
+        2.2.1 Who collects the tax?
+3. EconomyQuestion
+    3.1 Which would be the minimum amount if necessary in this exchange
 _______________________
 **Create SmaCQA model**
 
