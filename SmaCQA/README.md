@@ -45,6 +45,6 @@ To export the information collected in the textual question-and-answer model abo
 
 After this, the environment will generate a file with an HTML extension, which can be viewed by any browser. The file contains a visual representation in the form of a table, as shown in next Figure, with the information collected from the textual question-and-answer model.
 
-![HTML SmaCQA view](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly_import.jpg)
+![HTML SmaCQA view](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/invoice.PNG)
 
 
