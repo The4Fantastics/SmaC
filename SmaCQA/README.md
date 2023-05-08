@@ -5,7 +5,7 @@ SmaCQA is a textual DSL developed using the Xtext tool incorporated into the Sir
 **SmaCly Tool Display**
 _______________
 
-![SmaCly tool display](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaCly_Introduction.gif)
+![SmaCQA tool display](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Videos/SmaCly_Introduction.gif)
 
 **ScreenCast**
 _______________
@@ -19,7 +19,7 @@ _______________________
 ![SmaCQA tool](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/smacqametamodel.png)
 _______________
 
-**Technological bridge between SmaC and SmaCly**
+**Create SmaCQA model**
 
 * Import SmaCly Model (file.xml) generated from SmaC :
 
@@ -39,7 +39,7 @@ _______________
   
 * Generate a HTML view from SmaCQA model:
 
-To export the information collected in the textual question-and-answer model about an e{$^3$}value model to HTML format, click on the button in the IDE toolbar shown in next Figure:
+To export the information collected in the textual question-and-answer model about an e3value value model to HTML format, click on the button in the IDE toolbar shown in next Figure:
 
 ![Export to HTML](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/generatorTable.png)
 
@@ -47,33 +47,4 @@ After this, the environment will generate a file with an HTML extension, which c
 
 ![HTML SmaCQA view](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/SmaCly_import.jpg)
 
-
-**Tips**
-________________________
-* Language Patterns:
-
-  1.Define file block **(Obligatory).**
-  
-  2.Define compiler's version block **(Obligatory).**
-
-  2.Define libraries blocks.
-  
-  3.Define import(s) blocks.
-  
-  4.Define interface(s) blocks.
-
-  5.Define contracts **(At least 1, Obligatory).**
-
-  6.Define local variable(s).
-
-  7.Define contract's constructor(s).
-
-  8.Define contract's modifier(s).
-
-  9.Define contract's event(s).
-
-  10.Define contract's function(s).
-
-* You have a series of smart contract models represented by blocks that follow standards, such as ERC20, ERC223, etc. To use them, you must select the "Standards" option and select the standard you want:
-  ![Standards SmaCly](https://github.com/KybeleResearch/SmaC/blob/main/SmaCly/Images/erc20smacly.PNG) 
 
