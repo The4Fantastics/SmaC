@@ -34,7 +34,7 @@ _______________
   
   ![File Option](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/root_smacqa.png)
 
-  4.Once the finish button has been pressed, a textual model will have been generated for the definition of value exchanges. It is necessary to specify the actors and    the value being traded for each value exchange in which we wish to reflect the inherent conditions of this..
+  4.Once the finish button has been pressed, a textual model will have been generated for the definition of value exchanges. It is necessary to specify the actors (In this case Developer and Investo) and the value object (In this case, Pledge) being traded for each value exchange in which we wish to reflect the inherent conditions of this.
 
   ![SmaCQA Model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/erc20token.PNG)
   
