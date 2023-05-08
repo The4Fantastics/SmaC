@@ -38,11 +38,11 @@ _______________________
 be considered as representing a situation represented by two opposite states
 
 2. LegalQuestion
-    2.1 What would be the minimum legal age if necessary in this exchange?
-    2.2 What is the name of the tax? 
-        2.2.1 Who collects the tax?
+    - What would be the minimum legal age if necessary in this exchange?
+    - What is the name of the tax? 
+        - Who collects the tax?
 3. EconomyQuestion
-    3.1 Which would be the minimum amount if necessary in this exchange
+    - Which would be the minimum amount if necessary in this exchange
 _______________________
 **Create SmaCQA model**
 
