@@ -46,7 +46,7 @@ _______________________
   
   ![Choose Folder for SmaCQA model](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_folder_smacqamodel.PNG)
 
-  3.Choose the option "Model" for the root of the SmaCQA model
+  3.Choose the option "Model" for the root of the SmaCQA model 
   
   ![File Option](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/root_smacqa.png)
 
