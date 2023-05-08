@@ -10,7 +10,7 @@ _______________
 **ScreenCast**
 _______________
 
-![SmaCQA tool](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/smacqa.PNG)
+![SmaCQA tool](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/energycase_smacqa_iteration3.PNG)
 
 
 **SmaCQA Metamodel View**
