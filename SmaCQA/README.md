@@ -48,12 +48,13 @@ _______________________
 If you want to use SmaCQA in your own Eclipse distribution, you can import SmaCQA plugins to use it.
 1. First, download SmaCQA Plugins and unzip the file in your desktop.
 2. Open your Eclipse IDE and choose the "Install New Software" option that appears in the "Help" section of the Eclipse IDE toolbar. 
-  ![Install New Software](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_smacqa_model.PNG)
+  ![Install New Software](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/install%20New%20Software.png)
 3. Once this option is selected, a wizard will open to import the plugins. You must press the "Add" button.
-  ![Import plugins](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_smacqa_model.PNG)
+  ![Import plugins](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/install_add.png)
 4. Choose the SmaCQA folder and define a name for the import. Confirm the changes.
-  ![Complete SmaCQA Plugins](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_smacqa_model.PNG)
-5. Press the button "Next" until complete the installation.
+  ![Complete SmaCQA Plugins](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/data_addplugin.PNG)
+5. Choose the SmaCQA Plugin import and press the button "Next" until complete the installation.
+  ![Confirm Import](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/smacqa_install.png)
 _______________________
 **Create SmaCQA model**
 
