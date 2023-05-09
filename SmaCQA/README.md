@@ -44,6 +44,9 @@ be considered as representing a situation represented by two opposite states
 3. EconomyQuestion
     - Which would be the minimum amount if necessary in this exchange
 _______________________
+**Import SmaCQA plugins**
+If you want to use SmaCQA in your own Eclipse distribution, you can import SmaCQA plugins from the "Install New Software" option that appears in the "Help" section of the Eclipse IDE toolbar. Once this option is selected, a wizard will open to import the plugins. You must press the "Add" button
+_______________________
 **Create SmaCQA model**
 
   1.Find the SmaCQA option:
