@@ -45,7 +45,15 @@ be considered as representing a situation represented by two opposite states
     - Which would be the minimum amount if necessary in this exchange
 _______________________
 **Import SmaCQA plugins**
-If you want to use SmaCQA in your own Eclipse distribution, you can import SmaCQA plugins from the "Install New Software" option that appears in the "Help" section of the Eclipse IDE toolbar. Once this option is selected, a wizard will open to import the plugins. You must press the "Add" button
+If you want to use SmaCQA in your own Eclipse distribution, you can import SmaCQA plugins to use it.
+1. First, download SmaCQA Plugins and unzip the file in your desktop.
+2. Open your Eclipse IDE and choose the "Install New Software" option that appears in the "Help" section of the Eclipse IDE toolbar. 
+  ![Install New Software](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_smacqa_model.PNG)
+3. Once this option is selected, a wizard will open to import the plugins. You must press the "Add" button.
+  ![Import plugins](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_smacqa_model.PNG)
+4. Choose the SmaCQA folder and define a name for the import. Confirm the changes.
+  ![Complete SmaCQA Plugins](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Images/choose_smacqa_model.PNG)
+5. Press the button "Next" until complete the installation.
 _______________________
 **Create SmaCQA model**
 
