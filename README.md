@@ -26,8 +26,8 @@ _______________
 
 * Install required MDE plugins:
 
-- Download the e3value Update Site: [Link download] (https://github.com/KybeleResearch/SmaC/blob/main/Plugins/e3value_Plugins.zip)
-- Download the SmaCQA Update Site: [Link download] (https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Plugins/SmaCQA_Plugins.zip)
+   - Download the e3value Update Site: [Link download] (https://github.com/KybeleResearch/SmaC/blob/main/Plugins/e3value_Plugins.zip)
+   - Download the SmaCQA Update Site: [Link download] (https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Plugins/SmaCQA_Plugins.zip)
 
 * If you have an Eclipse running :
 
