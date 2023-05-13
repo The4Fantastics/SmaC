@@ -22,7 +22,11 @@ _______________
 **Install SmaC from Update Site🔧**
 _______________
 
-**It is necessary to have the Xtext and Sirius plugins installed previously so that the installation does not generate conflicts.**
+**It is necessary to have the Xtext, Sirius, e3value () and SmaCQA plugins installed previously so that the installation does not generate conflicts.**
+
+* Install e3value Plugins:
+ 
+ Download the SmaCQA Update Site: [Link download](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Plugins/SmaCQA_Plugins.zip)
 
 * If you have an Eclipse running :
 
