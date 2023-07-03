@@ -1,3 +1,4 @@
+
 **SmaC Tool**
 ================
 * Technological framework to facilitate the development of smart contracts. SmaC is a textual DSL that supports the coding of smart contracts with Solidity. These contracts can be injected to EMF models and then subject to any model-based processing task. In relation to some of the challenges of coding smart contracts, SmaC presents a series of advantages detailed below:  
@@ -61,11 +62,11 @@ _______________________
 
   3.Choose Smac Model's name -> Choose "File" element as the root of the model -> Ok
 
-![Select Root Model](https://github.com/CristianGM23/SmaC/blob/master/SmaC_ProcessCreationModel.JPG)
+![Select Root Model](https://github.com/SmaC/blob/master/SmaC_ProcessCreationModel.JPG)
 
   4.Write a Solidity Smart contract.
   
-Download a SmaC Guide PDF: [Link download](https://github.com/CristianGM23/SM2/blob/master/SmaCUpdateSite.zip)
+Download a SmaC Guide PDF: [Link download](https://github.com/SM2/blob/master/SmaCUpdateSite.zip)
 
 **Tips📖**
 ________________________
