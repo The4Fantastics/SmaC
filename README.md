@@ -36,13 +36,13 @@ _______________
 
   2.Choose Help -> Install New Software... from the menu bar and click Add...
 
-![Install New Software](https://github.com/CristianGM23/SmaC/blob/master/INNoVaSerV_InstallNewSoftware.png)
+![Install New Software](https://github.com/KybeleResearch/SmaC/blob/main/Images/INNoVaSerV_InstallNewSoftware.png)
 
   3.Choose the SmaC Update Site File and choose a name. Then, you click Add...
 
   4.Choose the SmaC plugin and click Next.
 
-![Install New Software](https://github.com/CristianGM23/SmaC/blob/master/INNoVaSerV_Install_SmaC_Plugin.png)
+![Install New Software](https://github.com/KybeleResearch/SmaC/blob/main/Images/INNoVaSerV_Install_SmaC_Plugin.png)
 
   5.Check the plugins that Eclipse will proceed to install.
 
@@ -62,7 +62,7 @@ _______________________
 
   3.Choose Smac Model's name -> Choose "File" element as the root of the model -> Ok
 
-![Select Root Model](https://github.com/SmaC/blob/master/SmaC_ProcessCreationModel.JPG)
+![Select Root Model](https://github.com/KybeleResearch/SmaC/blob/main/Images/SmaC_ProcessCreationModel.JPG)
 
   4.Write a Solidity Smart contract.
   
