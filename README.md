@@ -25,14 +25,14 @@ _______________
 **It is necessary to have the Xtext, Sirius, e3value and SmaCQA plugins installed previously so that the installation does not generate conflicts.**
 
 * Install Sirius:
-   - Link to Sirius install guide:  [Link guide] (https://www.eclipse.org/sirius/download.html)
+   - Link to Sirius install guide:  [Link guide](https://www.eclipse.org/sirius/download.html)
 * Install Xtext:
-   - Link to Xtext install guide:  [Link guide] (https://www.eclipse.org/Xtext/download.html) 
+   - Link to Xtext install guide:  [Link guide](https://www.eclipse.org/Xtext/download.html) 
 
 * Install required MDE plugins:
 
-   - Download the e3value Update Site: [Link download] (https://github.com/KybeleResearch/SmaC/blob/main/Plugins/e3value_Plugins.zip)
-   - Download the SmaCQA Update Site: [Link download] (https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Plugins/SmaCQA_Plugins.zip)
+   - Download the e3value Update Site: [Link download](https://github.com/KybeleResearch/SmaC/blob/main/Plugins/e3value_Plugins.zip)
+   - Download the SmaCQA Update Site: [Link download](https://github.com/KybeleResearch/SmaC/blob/main/SmaCQA/Plugins/SmaCQA_Plugins.zip)
 
 * If you have an Eclipse running :
 
