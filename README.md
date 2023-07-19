@@ -12,7 +12,7 @@
 
 **SmaC tool use**
 _______________
-![SmaCly tool display](https://github.com/KybeleResearch/SmaC/blob/main/Videos/SmaC_Calculator.gif)
+![SmaCly tool display](https://github.com/KybeleResearch/SmaC/blob/main/Videos/CalculatorFinishX2.gif)
 
 **ScreenCast**
 _______________
