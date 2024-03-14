@@ -4,15 +4,16 @@
    1. SmaC establishes a structural pattern for the coding of a smart contract. The specified smart contract is therefore made more readable and understandable by the developer.  
    2. It requires defining a gas control when executing the loop actions. This avoids infinite loops which may lead to security issues.  
    3. Although Solidity allows multiple inheritance, that is, a contract can inherit from several contracts at the same time, SmaC only allows single inheritance, which avoids what is known as the *Diamond Problem*. We advocate the use of interfaces to obtain external functionality that is defined outside the smart contract.  
-   4. It contains a series of ad-hoc facilities that can be easily extended or modified at the user's request. Some of these facilities are code autocompletion, validation and quickfixes.  
-   5. A set of ad-hoc data types (User & Company) has been bundled in the DSL grammar to facilitate the correspondence between SmaC and e3value notation.  
-   6. Any SmaC model (.sce extension) is itself a smart contract defined in Solidity. Therefore, it can be compiled to bytecode by any IDE intended for it, such as Remix.  
-   7. Apart from the EMF model generated from a smart contract encoded from the designed DSL. SmaC generates through Xtend, an eXtensible Markup Language (XML) model that can be interpreted by the Blockly api from the textual model. In this way, a technological bridge is established between the SmaC and SmaCly tools.  
+   4. It contains a series of ad-hoc facilities that can be easily extended or modified at the user's request. Some of these facilities are code autocompletion, validation and quickfixes.
+![SmaC autocomplete display](https://github.com/KybeleResearch/SmaC/blob/main/Videos/SmaCAutocomplete.gif)      
+   6. A set of ad-hoc data types (User & Company) has been bundled in the DSL grammar to facilitate the correspondence between SmaC and e3value notation.  
+   7. Any SmaC model (.sce extension) is itself a smart contract defined in Solidity. Therefore, it can be compiled to bytecode by any IDE intended for it, such as Remix.  
+   8. Apart from the EMF model generated from a smart contract encoded from the designed DSL. SmaC generates through Xtend, an eXtensible Markup Language (XML) model that can be interpreted by the Blockly api from the textual model. In this way, a technological bridge is established between the SmaC and SmaCly tools.  
 
 
 **SmaC tool use**
 _______________
-![SmaCly tool display](https://github.com/KybeleResearch/SmaC/blob/main/Videos/CalculatorFinishX2.gif)
+![SmaC tool display](https://github.com/KybeleResearch/SmaC/blob/main/Videos/CalculatorFinishX2.gif)
 
 **ScreenCast**
 _______________
